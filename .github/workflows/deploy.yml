@@ -1,0 +1,25 @@
+name: Deploy
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci && npx ng build
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/215685109609/locations/global/workloadIdentityPools/github/providers/github-provider
+          service_account: github-deployer@project-4a14afad-65e1-4f1e-9f2.iam.gserviceaccount.com
+      - uses: google-github-actions/setup-gcloud@v2
+      - run: |
+          gcloud compute ssh n8n --zone us-central1-a --tunnel-through-iap --command "rm -rf /tmp/site && mkdir -p /tmp/site"
+          gcloud compute scp --recurse --zone us-central1-a --tunnel-through-iap dist/SMB-automation/browser/* n8n:/tmp/site/
+          gcloud compute ssh n8n --zone us-central1-a --tunnel-through-iap --command "sudo rm -rf /var/www/smb && sudo mkdir -p /var/www && sudo cp -r /tmp/site /var/www/smb"
