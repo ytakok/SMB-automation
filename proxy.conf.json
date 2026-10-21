@@ -1,0 +1,7 @@
+{
+  "/webhook": {
+    "target": "https://smb.34-71-188-154.sslip.io",
+    "secure": true,
+    "changeOrigin": true
+  }
+}
