@@ -1,0 +1,137 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "a11y": {
+    "skip": "Skip to main content",
+    "home": "SMB Automation home",
+    "mainNav": "Main navigation",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "menu": "Navigation menu",
+    "language": "Language"
+  },
+  "common": {
+    "contact": "Talk to our team",
+    "learnMore": "Explore our services",
+    "home": "Back to home"
+  },
+  "footer": {
+    "tagline": "Practical automation for small businesses.",
+    "rights": "All rights reserved."
+  },
+  "home": {
+    "eyebrow": "More time for the work that matters",
+    "title": "Make your business run smoother.",
+    "intro": "We connect the tools you already use and automate repetitive work, so your team can focus on serving customers and growing your business.",
+    "primaryCta": "Talk to our team",
+    "secondaryCta": "See how we help",
+    "trust": "Practical systems. Thoughtful automation. Real business outcomes.",
+    "workflow": {
+      "label": "Your business, in sync",
+      "requestReceived": "Request received",
+      "teamNotified": "Team notified",
+      "workMovesForward": "Work moves forward"
+    },
+    "servicesTitle": "Less busywork. Better workflows.",
+    "servicesIntro": "Start with the bottleneck, then build a dependable solution around the way your business works.",
+    "services": {
+      "workflow": {
+        "title": "Workflow automation",
+        "description": "Reduce manual handoffs and keep everyday processes moving with clear, connected workflows."
+      },
+      "integration": {
+        "title": "Systems integration",
+        "description": "Bring your business tools together so information flows reliably between the places you work."
+      },
+      "ai": {
+        "title": "Practical AI",
+        "description": "Use AI thoughtfully for repetitive tasks, with people and clear safeguards in the loop."
+      }
+    },
+    "approachTitle": "Automation that fits your business",
+    "approachText": "We map the work first, choose the right tools, and deliver improvements in manageable steps—with documentation your team can actually use.",
+    "chatbot": {
+      "open": "Chat with us",
+      "close": "Close chat",
+      "title": "How can we help?",
+      "greeting": "Hi! Tell us what you'd like to make easier in your business.",
+      "inputLabel": "Your message",
+      "placeholder": "Type your message...",
+      "send": "Send",
+      "sending": "Sending...",
+      "error": "We couldn't send your message. Please try again."
+    },
+    "seo": {
+      "title": "Business automation for small businesses",
+      "description": "SMB Automation helps small businesses connect their tools, simplify processes, and spend less time on repetitive work."
+    }
+  },
+  "about": {
+    "eyebrow": "About SMB Automation",
+    "title": "Technology should make work feel simpler.",
+    "intro": "We help small and growing businesses replace fragile manual routines with clear, dependable systems.",
+    "principlesTitle": "A practical way to improve operations",
+    "principles": [
+      "Understand the real process before automating it.",
+      "Use tools that fit your team and existing systems.",
+      "Make every workflow understandable, maintainable, and measurable."
+    ],
+    "seo": {
+      "title": "About SMB Automation",
+      "description": "Learn about SMB Automation's practical, people-first approach to business process automation."
+    }
+  },
+  "services": {
+    "eyebrow": "What we do",
+    "title": "Automation built around your day-to-day work.",
+    "intro": "From one time-consuming task to a connected operating workflow, we help you make useful improvements without adding unnecessary complexity.",
+    "ariaLabel": "Automation services",
+    "items": [
+      {
+        "title": "Workflow automation",
+        "description": "Automate repeatable tasks, notifications, approvals, and handoffs while keeping the process visible to your team."
+      },
+      {
+        "title": "Business systems integration",
+        "description": "Connect your CRM, forms, email, scheduling, and internal tools to reduce duplicate entry and missed updates."
+      },
+      {
+        "title": "AI enablement",
+        "description": "Identify appropriate AI use cases, build assisted workflows, and define human review and data boundaries."
+      },
+      {
+        "title": "Process improvement",
+        "description": "Document the current workflow, identify bottlenecks, and prioritize changes based on effort and business value."
+      }
+    ],
+    "seo": {
+      "title": "Business automation services",
+      "description": "Explore workflow automation, systems integration, practical AI, and process improvement services for small businesses."
+    }
+  },
+  "contact": {
+    "eyebrow": "Start a conversation",
+    "title": "Tell us what is taking too much time.",
+    "intro": "Share the repetitive work or disconnected tools you would like to improve. We will help you identify a sensible next step.",
+    "emailLabel": "Email",
+    "emailAction": "Email our team",
+    "responseNote": "Prefer a direct note? Reach us by email and we will get back to you.",
+    "seo": {
+      "title": "Contact SMB Automation",
+      "description": "Get in touch with SMB Automation to discuss your team's workflows and automation opportunities."
+    }
+  },
+  "notFound": {
+    "eyebrow": "404 — Page not found",
+    "title": "This page isn't here.",
+    "intro": "The link may be outdated, or the page may have moved. You can head back to the home page.",
+    "seo": {
+      "title": "Page not found",
+      "description": "The requested page could not be found."
+    }
+  }
+}

@@ -23,15 +23,18 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "less",
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles"]
+            },
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.less"
-            ]
+            "styles": ["src/styles.less", "src/tenants/default/theme.less"],
+            "server": "src/main.server.ts",
+            "outputMode": "static"
           },
           "configurations": {
             "production": {
@@ -48,6 +51,28 @@
                 }
               ],
               "outputHashing": "all"
+            },
+            "default": {
+              "outputPath": "dist/default",
+              "fileReplacements": [
+                {
+                  "replace": "src/app/core/tenant/active-tenant.ts",
+                  "with": "src/tenants/default/active-tenant.ts"
+                }
+              ],
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "public/i18n",
+                  "output": "i18n"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "public/tenants/default",
+                  "output": "tenants/default"
+                }
+              ],
+              "styles": ["src/styles.less", "src/tenants/default/theme.less"]
             },
             "development": {
               "optimization": false,
@@ -68,6 +93,9 @@
             },
             "development": {
               "buildTarget": "SMB-automation:build:development"
+            },
+            "default": {
+              "buildTarget": "SMB-automation:build:development,default"
             }
           },
           "defaultConfiguration": "development"

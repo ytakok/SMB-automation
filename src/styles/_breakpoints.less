@@ -1,0 +1,28 @@
+@bp-sm: 36em;
+@bp-md: 48em;
+@bp-lg: 64em;
+@bp-xl: 80em;
+
+.from-sm(@rules) {
+  @media (min-width: @bp-sm) {
+    @rules();
+  }
+}
+
+.from-md(@rules) {
+  @media (min-width: @bp-md) {
+    @rules();
+  }
+}
+
+.from-lg(@rules) {
+  @media (min-width: @bp-lg) {
+    @rules();
+  }
+}
+
+.from-xl(@rules) {
+  @media (min-width: @bp-xl) {
+    @rules();
+  }
+}

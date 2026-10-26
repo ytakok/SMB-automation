@@ -1,0 +1,16 @@
+<article class="contact-page">
+  <p class="eyebrow">{{ 'contact.eyebrow' | translate }}</p>
+  <h1>{{ 'contact.title' | translate }}</h1>
+  <p class="lead">{{ 'contact.intro' | translate }}</p>
+
+  <section class="contact-card" aria-labelledby="email-heading">
+    <h2 id="email-heading">{{ 'contact.emailLabel' | translate }}</h2>
+    <a class="email" [href]="'mailto:' + tenant.config().contact.email">
+      <bdi>{{ tenant.config().contact.email }}</bdi>
+    </a>
+    <p>{{ 'contact.responseNote' | translate }}</p>
+    <a class="button" [href]="'mailto:' + tenant.config().contact.email">
+      {{ 'contact.emailAction' | translate }}
+    </a>
+  </section>
+</article>

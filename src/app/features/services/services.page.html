@@ -1,0 +1,19 @@
+<article class="content-page">
+  <header class="page-heading">
+    <p class="eyebrow">{{ 'services.eyebrow' | translate }}</p>
+    <h1>{{ 'services.title' | translate }}</h1>
+    <p class="lead">{{ 'services.intro' | translate }}</p>
+  </header>
+
+  <section class="service-grid" [attr.aria-label]="'services.ariaLabel' | translate">
+    @for (service of services; track service) {
+      <article class="service-card">
+        <span class="service-number" aria-hidden="true">0{{ service + 1 }}</span>
+        <h2>{{ 'services.items.' + service + '.title' | translate }}</h2>
+        <p>{{ 'services.items.' + service + '.description' | translate }}</p>
+      </article>
+    }
+  </section>
+
+  <a class="button" routerLink="../contact">{{ 'common.contact' | translate }}</a>
+</article>

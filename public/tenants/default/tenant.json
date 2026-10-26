@@ -1,0 +1,28 @@
+{
+  "id": "default",
+  "name": "SMB Automation",
+  "defaultLang": "en",
+  "languages": [
+    { "code": "en", "dir": "ltr", "label": "English" },
+    { "code": "he", "dir": "rtl", "label": "עברית" }
+  ],
+  "logo": {
+    "src": "/tenants/default/logo.svg",
+    "width": 176,
+    "height": 42
+  },
+  "siteUrl": "https://smb-automation.example",
+  "seo": {
+    "ogImage": "/tenants/default/og-image.svg"
+  },
+  "contact": {
+    "email": "hello@smb-automation.example"
+  },
+  "social": [],
+  "nav": [
+    { "path": "", "labelKey": "nav.home" },
+    { "path": "services", "labelKey": "nav.services" },
+    { "path": "about", "labelKey": "nav.about" },
+    { "path": "contact", "labelKey": "nav.contact" }
+  ]
+}

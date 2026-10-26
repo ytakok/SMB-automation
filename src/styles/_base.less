@@ -1,0 +1,63 @@
+html {
+  min-block-size: 100%;
+  background: var(--color-bg);
+  overflow-x: clip;
+  scroll-padding-block-start: calc(var(--header-height) + var(--space-4));
+}
+
+body {
+  min-block-size: 100%;
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-200);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+main:focus-visible {
+  outline: none;
+}
+
+a {
+  color: var(--color-primary);
+  text-underline-offset: 0.2em;
+}
+
+img,
+svg {
+  display: block;
+  max-inline-size: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.container {
+  inline-size: calc(100% - 2 * var(--space-4));
+  max-inline-size: var(--container-max);
+  margin-inline: auto;
+}
+
+main {
+  display: block;
+  min-block-size: 60vh;
+}

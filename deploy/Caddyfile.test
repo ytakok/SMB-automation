@@ -1,0 +1,15 @@
+smb-automation.test:8080 {
+  root * ./dist/default/browser
+  encode gzip
+
+  @root path /
+  redir @root /en 302
+
+  try_files {path} {path}/index.html
+  file_server
+
+  handle_errors 404 {
+    rewrite * /en/not-found/index.html
+    file_server
+  }
+}

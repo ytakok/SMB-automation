@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /errorLogs/{logId} {
+      allow create: if request.resource.data.keys().hasOnly([
+          'tenantId', 'message', 'name', 'stack', 'source', 'url',
+          'lang', 'userAgent', 'appVersion', 'extra', 'createdAt'
+        ])
+        && request.resource.data.tenantId is string
+        && request.resource.data.tenantId.size() <= 64
+        && request.resource.data.message is string
+        && request.resource.data.message.size() <= 1000
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 200
+        && request.resource.data.stack is string
+        && request.resource.data.stack.size() <= 4000
+        && request.resource.data.source in ['global', 'http', 'manual']
+        && request.resource.data.url is string
+        && request.resource.data.url.size() <= 2048
+        && request.resource.data.lang is string
+        && request.resource.data.lang.size() <= 20
+        && request.resource.data.userAgent is string
+        && request.resource.data.userAgent.size() <= 300
+        && request.resource.data.appVersion is string
+        && (request.resource.data.extra == null
+          || (request.resource.data.extra is map
+            && request.resource.data.extra.keys().hasOnly(['status'])
+            && request.resource.data.extra.status is number))
+        && request.resource.data.createdAt == request.time;
+      allow read, update, delete: if false;
+    }
+  }
+}

@@ -1,0 +1,95 @@
+<a class="skip-link" href="#main">{{ 'a11y.skip' | translate }}</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a
+      class="brand"
+      [routerLink]="['/', i18n.lang()]"
+      [attr.aria-label]="'a11y.home' | translate"
+      (click)="closeMenu()"
+    >
+      <img
+        [ngSrc]="tenant.config().logo.src"
+        [width]="tenant.config().logo.width"
+        [height]="tenant.config().logo.height"
+        [alt]="tenant.config().name"
+        priority
+      />
+    </a>
+
+    <button
+      #menuToggle
+      class="menu-toggle"
+      type="button"
+      aria-controls="primary-menu"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="toggleMenu()"
+    >
+      <span class="visually-hidden">
+        {{ (menuOpen() ? 'a11y.closeMenu' : 'a11y.openMenu') | translate }}
+      </span>
+      <span class="menu-toggle__icon" aria-hidden="true"></span>
+    </button>
+
+    <nav
+      class="primary-nav"
+      id="primary-menu"
+      [class.is-open]="menuOpen()"
+      [attr.aria-label]="'a11y.mainNav' | translate"
+    >
+      <ul role="list">
+        @for (item of tenant.config().nav; track item.path) {
+          <li>
+            <a
+              [routerLink]="item.path ? ['/', i18n.lang(), item.path] : ['/', i18n.lang()]"
+              routerLinkActive="is-active"
+              [routerLinkActiveOptions]="{ exact: item.path === '' }"
+              ariaCurrentWhenActive="page"
+              (click)="closeMenu()"
+            >
+              {{ item.labelKey | translate }}
+            </a>
+          </li>
+        }
+      </ul>
+      <div class="language-switcher" role="group" [attr.aria-label]="'a11y.language' | translate">
+        @for (language of tenant.languages(); track language.code) {
+          @if (i18n.lang() !== language.code) {
+            <a
+              class="language-link"
+              [routerLink]="languageLink(language.code)"
+              [attr.lang]="language.code"
+              (click)="closeMenu()"
+            >
+              {{ language.label }}
+            </a>
+          }
+        }
+      </div>
+      <a
+        class="button button--small"
+        [routerLink]="['/', i18n.lang(), 'contact']"
+        (click)="closeMenu()"
+      >
+        {{ 'common.contact' | translate }}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main #main id="main" class="site-main container" tabindex="-1">
+  <router-outlet />
+</main>
+
+<p class="visually-hidden" aria-live="polite" aria-atomic="true">{{ announcement() }}</p>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <a class="footer-brand" [routerLink]="['/', i18n.lang()]">{{ tenant.config().name }}</a>
+    <p>{{ 'footer.tagline' | translate }}</p>
+    <a [href]="'mailto:' + tenant.config().contact.email">
+      <bdi>{{ tenant.config().contact.email }}</bdi>
+    </a>
+    <small>© {{ tenant.config().name }}. {{ 'footer.rights' | translate }}</small>
+  </div>
+</footer>

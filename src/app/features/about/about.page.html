@@ -1,0 +1,14 @@
+<article class="content-page">
+  <p class="eyebrow">{{ 'about.eyebrow' | translate }}</p>
+  <h1>{{ 'about.title' | translate }}</h1>
+  <p class="lead">{{ 'about.intro' | translate }}</p>
+
+  <section class="principles" aria-labelledby="principles-heading">
+    <h2 id="principles-heading">{{ 'about.principlesTitle' | translate }}</h2>
+    <ul>
+      @for (principle of principles; track principle) {
+        <li>{{ 'about.principles.' + principle | translate }}</li>
+      }
+    </ul>
+  </section>
+</article>

@@ -1,0 +1,69 @@
+<section class="hero">
+  <div class="hero__copy">
+    <p class="eyebrow">{{ 'home.eyebrow' | translate }}</p>
+    <h1>{{ 'home.title' | translate }}</h1>
+    <p class="hero__intro">{{ 'home.intro' | translate }}</p>
+    <div class="hero__actions">
+      <a class="button" routerLink="contact">{{ 'home.primaryCta' | translate }}</a>
+      <a class="text-link" routerLink="services"
+        >{{ 'home.secondaryCta' | translate }} <span aria-hidden="true">→</span></a
+      >
+    </div>
+  </div>
+  <div class="hero__visual" aria-hidden="true">
+    <div class="workflow-card">
+      <span class="workflow-card__label">{{ 'home.workflow.label' | translate }}</span>
+      <div class="workflow-step">
+        <span class="workflow-step__icon">01</span
+        ><span>{{ 'home.workflow.requestReceived' | translate }}</span
+        ><span class="workflow-step__check">✓</span>
+      </div>
+      <div class="workflow-connector"></div>
+      <div class="workflow-step">
+        <span class="workflow-step__icon">02</span
+        ><span>{{ 'home.workflow.teamNotified' | translate }}</span
+        ><span class="workflow-step__check">✓</span>
+      </div>
+      <div class="workflow-connector"></div>
+      <div class="workflow-step">
+        <span class="workflow-step__icon">03</span
+        ><span>{{ 'home.workflow.workMovesForward' | translate }}</span
+        ><span class="workflow-step__check">✓</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<p class="trust-note">{{ 'home.trust' | translate }}</p>
+
+<section class="services-section" aria-labelledby="services-heading">
+  <div class="section-heading">
+    <p class="eyebrow">{{ 'nav.services' | translate }}</p>
+    <h2 id="services-heading">{{ 'home.servicesTitle' | translate }}</h2>
+    <p>{{ 'home.servicesIntro' | translate }}</p>
+  </div>
+  <div class="service-grid">
+    @for (service of services; track service) {
+      <article class="service-card">
+        <span class="service-card__icon" aria-hidden="true">{{ $index + 1 }}</span>
+        <h3>{{ 'home.services.' + service + '.title' | translate }}</h3>
+        <p>{{ 'home.services.' + service + '.description' | translate }}</p>
+      </article>
+    }
+  </div>
+</section>
+
+<section class="approach-section">
+  <div>
+    <p class="eyebrow">{{ 'nav.about' | translate }}</p>
+    <h2>{{ 'home.approachTitle' | translate }}</h2>
+  </div>
+  <div>
+    <p>{{ 'home.approachText' | translate }}</p>
+    <a class="text-link" routerLink="about"
+      >{{ 'nav.about' | translate }} <span aria-hidden="true">→</span></a
+    >
+  </div>
+</section>
+
+<app-chatbot-widget />

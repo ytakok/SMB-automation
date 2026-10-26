@@ -1,0 +1,13 @@
+# SMB Automation
+
+SMB Automation helps small and growing businesses reduce repetitive work, connect business software, and improve everyday processes.
+
+## Services
+- Workflow automation
+- Business systems integration
+- Practical AI enablement
+- Process improvement
+
+## Contact
+Email: hello@smb-automation.example
+Website: https://smb-automation.example
