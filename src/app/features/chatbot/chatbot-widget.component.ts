@@ -57,22 +57,17 @@ function replyText(response: unknown): string {
             </button>
           </header>
           <div class="chat-messages" role="log" aria-live="polite" aria-relevant="additions">
-            <p class="chat-message chat-message--assistant">
-              {{ 'home.chatbot.greeting' | translate }}
-            </p>
+            <p class="chat-message chat-message--assistant">{{ 'home.chatbot.greeting' | translate }}</p>
             @for (message of messages(); track $index) {
               <p
                 class="chat-message"
                 [class.chat-message--user]="message.role === 'user'"
                 [class.chat-message--assistant]="message.role === 'assistant'"
-              >
-                {{ message.text }}
-              </p>
+                dir="auto"
+              >{{ message.text }}</p>
             }
             @if (sending()) {
-              <p class="chat-message chat-message--assistant">
-                {{ 'home.chatbot.sending' | translate }}
-              </p>
+              <p class="chat-message chat-message--assistant">{{ 'home.chatbot.sending' | translate }}</p>
             }
           </div>
           @if (hasError()) {
@@ -88,6 +83,7 @@ function replyText(response: unknown): string {
               name="message"
               type="text"
               autocomplete="off"
+              dir="auto"
               maxlength="2000"
               [placeholder]="'home.chatbot.placeholder' | translate"
               [disabled]="sending()"
