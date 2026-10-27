@@ -29,5 +29,40 @@ service cloud.firestore {
         && request.resource.data.createdAt == request.time;
       allow read, update, delete: if false;
     }
+
+    // Contact-page requests: anyone may create a validated request; nobody can read
+    // them from the client. Read them in the Firebase console or with the Admin SDK.
+    match /contacts/{contactId} {
+      allow create: if request.resource.data.keys().hasOnly([
+          'tenantId', 'fullName', 'email', 'phone', 'message',
+          'lang', 'pageUrl', 'status', 'createdAt'
+        ])
+        && request.resource.data.keys().hasAll([
+          'tenantId', 'fullName', 'email', 'phone', 'message',
+          'lang', 'pageUrl', 'status', 'createdAt'
+        ])
+        && request.resource.data.tenantId is string
+        && request.resource.data.tenantId.size() > 0
+        && request.resource.data.tenantId.size() <= 64
+        && request.resource.data.fullName is string
+        && request.resource.data.fullName.size() >= 2
+        && request.resource.data.fullName.size() <= 100
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 254
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+[.][^@\\s]+$')
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() >= 7
+        && request.resource.data.phone.size() <= 25
+        && request.resource.data.phone.matches('^[+]?[0-9 ().-]+$')
+        && request.resource.data.message is string
+        && request.resource.data.message.size() <= 2000
+        && request.resource.data.lang is string
+        && request.resource.data.lang.size() <= 20
+        && request.resource.data.pageUrl is string
+        && request.resource.data.pageUrl.size() <= 2048
+        && request.resource.data.status == 'new'
+        && request.resource.data.createdAt == request.time;
+      allow read, update, delete: if false;
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { FIREBASE_CONFIG } from '../firebase/firestore-gateway';
 import { TenantService } from '../tenant/tenant.service';
 
 export type ErrorSource = 'global' | 'http' | 'manual';
@@ -9,6 +10,7 @@ export type ErrorSource = 'global' | 'http' | 'manual';
 export class ErrorLogService {
   private readonly browser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly tenant = inject(TenantService);
+  private readonly firebaseConfig = inject(FIREBASE_CONFIG);
   private readonly recent = new Map<string, number>();
   private database?: Promise<import('firebase/firestore/lite').Firestore>;
 
@@ -33,7 +35,7 @@ export class ErrorLogService {
       return;
     }
 
-    if (!environment.firebase.apiKey || !environment.firebase.projectId) {
+    if (!this.firebaseConfig.apiKey || !this.firebaseConfig.projectId) {
       console.error(
         'Firebase error logging is not configured. Set the Firebase fields in src/environments/environment.ts.',
         normalized,
@@ -44,7 +46,7 @@ export class ErrorLogService {
     try {
       const [{ initializeApp, getApps }, { addDoc, collection, getFirestore, serverTimestamp }] =
         await Promise.all([import('firebase/app'), import('firebase/firestore/lite')]);
-      const app = getApps()[0] ?? initializeApp(environment.firebase);
+      const app = getApps()[0] ?? initializeApp(this.firebaseConfig);
       this.database ??= Promise.resolve(getFirestore(app));
       const url = this.browser ? window.location.pathname : '';
       await addDoc(collection(await this.database, 'errorLogs'), {

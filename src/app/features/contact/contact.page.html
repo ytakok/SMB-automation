@@ -1,16 +1,224 @@
 <article class="contact-page">
-  <p class="eyebrow">{{ 'contact.eyebrow' | translate }}</p>
-  <h1>{{ 'contact.title' | translate }}</h1>
-  <p class="lead">{{ 'contact.intro' | translate }}</p>
+  <a class="back-link" [routerLink]="['/', i18n.lang()]">
+    <svg
+      class="back-link__icon"
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M15 5l-7 7 7 7"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <span>{{ 'common.home' | translate }}</span>
+  </a>
 
-  <section class="contact-card" aria-labelledby="email-heading">
-    <h2 id="email-heading">{{ 'contact.emailLabel' | translate }}</h2>
-    <a class="email" [href]="'mailto:' + tenant.config().contact.email">
-      <bdi>{{ tenant.config().contact.email }}</bdi>
-    </a>
-    <p>{{ 'contact.responseNote' | translate }}</p>
-    <a class="button" [href]="'mailto:' + tenant.config().contact.email">
-      {{ 'contact.emailAction' | translate }}
-    </a>
-  </section>
+  <header class="contact-intro">
+    <p class="eyebrow">{{ 'contact.eyebrow' | translate }}</p>
+    <h1>{{ 'contact.title' | translate }}</h1>
+    <p class="lead">{{ 'contact.intro' | translate }}</p>
+  </header>
+
+  <div class="contact-layout">
+    <section class="form-card" aria-labelledby="form-heading">
+      @if (status() === 'success') {
+        <div class="result result--success" role="status">
+          <svg
+            class="result__icon"
+            viewBox="0 0 24 24"
+            width="48"
+            height="48"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle cx="12" cy="12" r="11" fill="currentColor" opacity="0.12" />
+            <path
+              d="M7 12.5l3.2 3.2L17 9"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.25"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <h2 id="form-heading" #successHeading tabindex="-1">
+            {{ 'contact.form.success.title' | translate }}
+          </h2>
+          <p>{{ 'contact.form.success.text' | translate }}</p>
+          <div class="result__actions">
+            <a class="button" [routerLink]="['/', i18n.lang()]">{{ 'common.home' | translate }}</a>
+            <button class="button button--ghost" type="button" (click)="startOver()">
+              {{ 'contact.form.success.sendAnother' | translate }}
+            </button>
+          </div>
+        </div>
+      } @else {
+        <h2 id="form-heading">{{ 'contact.form.title' | translate }}</h2>
+        <p class="required-note">
+          <span aria-hidden="true">*</span> {{ 'contact.form.requiredNote' | translate }}
+        </p>
+
+        @if (submitAttempted() && invalidFields().length) {
+          <div
+            class="error-summary"
+            #errorSummary
+            tabindex="-1"
+            role="group"
+            aria-labelledby="error-summary-title"
+          >
+            <h3 id="error-summary-title">{{ 'contact.form.summaryTitle' | translate }}</h3>
+            <ul role="list">
+              @for (field of invalidFields(); track field) {
+                <li>
+                  <a [href]="'#contact-' + field" (click)="focusField($event, field)">{{
+                    errorKey(field)! | translate
+                  }}</a>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+
+        @if (status() === 'error') {
+          <div class="form-alert" role="alert">
+            <p class="form-alert__title">{{ 'contact.form.failure.title' | translate }}</p>
+            <p>
+              {{ 'contact.form.failure.text' | translate }}
+              <a [href]="'mailto:' + tenant.config().contact.email"
+                ><bdi>{{ tenant.config().contact.email }}</bdi></a
+              >
+            </p>
+          </div>
+        }
+
+        <form class="contact-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <div class="field" [class.field--invalid]="errorKey('fullName')">
+            <label for="contact-fullName">
+              {{ 'contact.form.fullName.label' | translate }}
+              <span class="field__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              id="contact-fullName"
+              type="text"
+              formControlName="fullName"
+              autocomplete="name"
+              required
+              [attr.maxlength]="limits.fullNameMax"
+              [attr.aria-invalid]="errorKey('fullName') ? 'true' : null"
+              [attr.aria-describedby]="errorKey('fullName') ? 'contact-fullName-error' : null"
+            />
+            @if (errorKey('fullName'); as key) {
+              <p class="field__error" id="contact-fullName-error">{{ key | translate }}</p>
+            }
+          </div>
+
+          <div class="field" [class.field--invalid]="errorKey('email')">
+            <label for="contact-email">
+              {{ 'contact.form.email.label' | translate }}
+              <span class="field__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              id="contact-email"
+              type="email"
+              dir="ltr"
+              inputmode="email"
+              formControlName="email"
+              autocomplete="email"
+              spellcheck="false"
+              required
+              [attr.maxlength]="limits.emailMax"
+              [attr.aria-invalid]="errorKey('email') ? 'true' : null"
+              [attr.aria-describedby]="errorKey('email') ? 'contact-email-error' : null"
+            />
+            @if (errorKey('email'); as key) {
+              <p class="field__error" id="contact-email-error">{{ key | translate }}</p>
+            }
+          </div>
+
+          <div class="field" [class.field--invalid]="errorKey('phone')">
+            <label for="contact-phone">
+              {{ 'contact.form.phone.label' | translate }}
+              <span class="field__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              id="contact-phone"
+              type="tel"
+              dir="ltr"
+              inputmode="tel"
+              formControlName="phone"
+              autocomplete="tel"
+              required
+              [attr.maxlength]="limits.phoneMax"
+              [attr.aria-invalid]="errorKey('phone') ? 'true' : null"
+              [attr.aria-describedby]="
+                errorKey('phone') ? 'contact-phone-hint contact-phone-error' : 'contact-phone-hint'
+              "
+            />
+            <p class="field__hint" id="contact-phone-hint">
+              {{ 'contact.form.phone.hint' | translate }}
+            </p>
+            @if (errorKey('phone'); as key) {
+              <p class="field__error" id="contact-phone-error">{{ key | translate }}</p>
+            }
+          </div>
+
+          <div class="field" [class.field--invalid]="errorKey('message')">
+            <label for="contact-message">
+              {{ 'contact.form.message.label' | translate }}
+              <span class="field__optional">{{ 'contact.form.optional' | translate }}</span>
+            </label>
+            <p class="field__hint" id="contact-message-hint">
+              {{ 'contact.form.message.hint' | translate }}
+            </p>
+            <textarea
+              id="contact-message"
+              rows="6"
+              formControlName="message"
+              [attr.maxlength]="limits.messageMax"
+              [attr.aria-invalid]="errorKey('message') ? 'true' : null"
+              [attr.aria-describedby]="
+                errorKey('message')
+                  ? 'contact-message-hint contact-message-error'
+                  : 'contact-message-hint'
+              "
+            ></textarea>
+            <p class="field__counter" aria-hidden="true">
+              {{ form.controls.message.value.length }} / {{ limits.messageMax }}
+            </p>
+            @if (errorKey('message'); as key) {
+              <p class="field__error" id="contact-message-error">{{ key | translate }}</p>
+            }
+          </div>
+
+          <button
+            class="button button--submit"
+            type="submit"
+            [attr.aria-disabled]="status() === 'submitting' ? 'true' : null"
+          >
+            @if (status() === 'submitting') {
+              <span class="spinner" aria-hidden="true"></span>
+              {{ 'contact.form.submitting' | translate }}
+            } @else {
+              {{ 'contact.form.submit' | translate }}
+            }
+          </button>
+        </form>
+      }
+    </section>
+
+    <aside class="contact-card" aria-labelledby="email-heading">
+      <h2 id="email-heading">{{ 'contact.emailLabel' | translate }}</h2>
+      <p>{{ 'contact.responseNote' | translate }}</p>
+      <a class="email" [href]="'mailto:' + tenant.config().contact.email">
+        <bdi>{{ tenant.config().contact.email }}</bdi>
+      </a>
+    </aside>
+  </div>
 </article>

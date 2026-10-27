@@ -123,6 +123,54 @@
     "seo": {
       "title": "Contact SMB Automation",
       "description": "Get in touch with SMB Automation to discuss your team's workflows and automation opportunities."
+    },
+    "form": {
+      "title": "Send us a request",
+      "requiredNote": "Required fields are marked with an asterisk.",
+      "optional": "(optional)",
+      "summaryTitle": "Please fix the following:",
+      "submit": "Send request",
+      "submitting": "Sending…",
+      "fullName": {
+        "label": "Full name",
+        "errors": {
+          "required": "Please enter your full name.",
+          "minlength": "Full name must be at least 2 characters.",
+          "maxlength": "Full name can be up to 100 characters."
+        }
+      },
+      "email": {
+        "label": "Email",
+        "errors": {
+          "required": "Please enter your email address.",
+          "invalid": "Please enter a valid email address, for example name@company.com.",
+          "maxlength": "Email address can be up to 254 characters."
+        }
+      },
+      "phone": {
+        "label": "Phone number",
+        "hint": "Include the area code, for example 050-123-4567.",
+        "errors": {
+          "required": "Please enter your phone number.",
+          "invalid": "Please enter a valid phone number with 7 to 15 digits."
+        }
+      },
+      "message": {
+        "label": "How can we help?",
+        "hint": "Tell us about the process or tools you would like to improve.",
+        "errors": {
+          "maxlength": "Your message can be up to 2,000 characters."
+        }
+      },
+      "success": {
+        "title": "Your request was sent successfully.",
+        "text": "Thank you for reaching out. We will contact you soon.",
+        "sendAnother": "Send another request"
+      },
+      "failure": {
+        "title": "We could not send your request.",
+        "text": "Please try again in a moment, or email us at"
+      }
     }
   },
   "notFound": {

@@ -1,12 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
+import { FIREBASE_CONFIG } from '../firebase/firestore-gateway';
 import { ErrorLogService } from './error-log.service';
 
 describe('ErrorLogService', () => {
   it('surfaces missing Firebase configuration instead of reporting a successful write', async () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
     TestBed.configureTestingModule({
-      providers: [{ provide: PLATFORM_ID, useValue: 'browser' }],
+      providers: [
+        { provide: PLATFORM_ID, useValue: 'browser' },
+        { provide: FIREBASE_CONFIG, useValue: { apiKey: '', projectId: '' } },
+      ],
     });
     const logger = TestBed.inject(ErrorLogService);
 

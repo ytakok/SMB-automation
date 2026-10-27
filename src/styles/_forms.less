@@ -1,0 +1,134 @@
+/*
+ * Shared, accessible form styles (WCAG 2.2): visible labels, 44px targets,
+ * focus ring, and errors shown with text + icon, not color alone.
+ * Markup: .field > label + .field__hint? + input|textarea + .field__error?
+ */
+.field {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+
+  label {
+    font-weight: 600;
+  }
+
+  input,
+  textarea,
+  select {
+    inline-size: 100%;
+    min-block-size: var(--target-min);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+    color: var(--color-text);
+    transition: border-color var(--dur) var(--ease);
+
+    &:hover {
+      border-color: var(--color-muted);
+    }
+
+    &:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 1px;
+      border-color: var(--color-focus);
+    }
+  }
+
+  textarea {
+    min-block-size: 9rem;
+    resize: vertical;
+  }
+}
+
+/* Email/phone inputs are typed left-to-right; align them with the page in RTL. */
+[dir='rtl'] .field input[dir='ltr'] {
+  text-align: end;
+}
+
+.field__required {
+  color: var(--color-danger);
+}
+
+.field__optional,
+.field__hint,
+.field__counter {
+  color: var(--color-muted);
+  font-size: var(--fs-100);
+  font-weight: 400;
+}
+
+.field__hint,
+.field__counter {
+  margin: 0;
+}
+
+.field__counter {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.field--invalid input,
+.field--invalid textarea,
+.field--invalid select {
+  border: 2px solid var(--color-danger);
+}
+
+.field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--fs-100);
+  font-weight: 600;
+
+  &::before {
+    content: '!';
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    inline-size: 1.25em;
+    block-size: 1.25em;
+    margin-block-start: 0.1em;
+    border-radius: 50%;
+    background: var(--color-danger);
+    color: var(--color-bg);
+    font-size: 0.85em;
+  }
+}
+
+/* Error summary (focused after an invalid submit) and send-failure alert */
+.error-summary,
+.form-alert {
+  margin-block-end: var(--space-6);
+  padding: var(--space-4) var(--space-6);
+  border: 2px solid var(--color-danger);
+  border-radius: var(--radius-sm);
+  background: var(--color-danger-tint);
+
+  p {
+    margin-block: 0;
+  }
+}
+
+.error-summary h3,
+.form-alert__title {
+  margin-block: 0 var(--space-2);
+  font-size: var(--fs-200);
+  font-weight: 700;
+}
+
+.error-summary ul {
+  margin: 0;
+  padding-inline-start: var(--space-6);
+}
+
+.error-summary li + li {
+  margin-block-start: var(--space-1);
+}
+
+.error-summary a {
+  color: var(--color-danger);
+  font-weight: 600;
+}
