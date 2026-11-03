@@ -1,0 +1,125 @@
+@import '_breakpoints';
+
+:host {
+  display: block;
+  min-inline-size: 0;
+}
+
+.app-card {
+  padding: var(--space-6) var(--space-4);
+  border: 1px solid var(--color-border-card);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-sm);
+
+  .from-sm({
+    padding: var(--space-8);
+  });
+}
+
+.app-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-block-end: var(--space-6);
+
+  h2 {
+    margin: 0;
+    margin-inline-end: auto;
+    font-size: var(--fs-400);
+    line-height: 1.2;
+  }
+}
+
+.app-card__time {
+  color: var(--color-muted);
+  font-size: var(--fs-100);
+}
+
+.app-card__status {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-muted);
+  font-size: var(--fs-100);
+  font-weight: 700;
+
+  &.is-ready {
+    background: var(--color-accent-tint);
+    color: var(--color-accent);
+
+    &::before {
+      content: '✓ ';
+    }
+  }
+}
+
+.app-card__steps {
+  display: grid;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-step {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+.app-step__num {
+  display: grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: 50%;
+  background: var(--color-tint);
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.app-step__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  justify-items: start;
+  min-inline-size: 0;
+  padding-block-start: 0.2rem;
+
+  p {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .field {
+    inline-size: 100%;
+  }
+}
+
+.app-step__note {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-muted);
+  font-size: var(--fs-100);
+}
+
+.copy-row,
+.paste-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  inline-size: 100%;
+
+  > code,
+  > input {
+    flex: 1 1 16rem;
+    min-inline-size: 0;
+  }
+}
+
+:host-context([dir='rtl']) .connect-btn__icon {
+  transform: scaleX(-1);
+}

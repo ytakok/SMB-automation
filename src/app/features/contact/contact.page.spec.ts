@@ -71,7 +71,15 @@ describe('ContactPage', () => {
     expect(field('phone').getAttribute('autocomplete')).toBe('tel');
   });
 
-  it('shows linked required errors and focuses the error summary on an empty submit', async () => {
+  it('shows translated placeholders and no phone area-code hint', () => {
+    for (const id of ['fullName', 'email', 'phone', 'message']) {
+      expect(field(id).getAttribute('placeholder')).toBe(`contact.form.${id}.placeholder`);
+    }
+    expect(element.querySelector('#contact-phone-hint')).toBeNull();
+    expect(element.querySelector('#contact-message-hint')).toBeNull();
+  });
+
+  it('shows required errors under their fields and focuses the first invalid field', async () => {
     await submitForm();
 
     expect(submitRequest).not.toHaveBeenCalled();
@@ -85,14 +93,6 @@ describe('ContactPage', () => {
     }
     expect(field('message').getAttribute('aria-invalid')).toBeNull();
 
-    const summary = element.querySelector('.error-summary') as HTMLElement;
-    expect(summary.querySelectorAll('li')).toHaveLength(3);
-    expect(document.activeElement).toBe(summary);
-  });
-
-  it('error-summary links move focus to the field', async () => {
-    await submitForm();
-    (element.querySelector('.error-summary a') as HTMLAnchorElement).click();
     expect(document.activeElement).toBe(field('fullName'));
   });
 
@@ -138,7 +138,7 @@ describe('ContactPage', () => {
     await fixture.whenStable();
 
     expect(field('fullName').value).toBe('');
-    expect(element.querySelector('.error-summary')).toBeNull();
+    expect(element.querySelector('#contact-fullName-error')).toBeNull();
   });
 
   it('keeps the data, shows an alert and logs the failure when sending fails', async () => {

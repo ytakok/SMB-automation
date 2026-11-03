@@ -1,0 +1,116 @@
+<article class="connect-page">
+  <header class="page-heading">
+    <p class="eyebrow">{{ 'connect.eyebrow' | translate }}</p>
+    <h1>{{ 'connect.title' | translate }}</h1>
+    <p class="lead">{{ 'connect.intro' | translate }}</p>
+  </header>
+
+  <ol class="how" [attr.aria-label]="'connect.howLabel' | translate">
+    @for (step of howSteps; track step) {
+      <li>
+        <span class="how__num" aria-hidden="true">{{ step + 1 }}</span>
+        {{ 'connect.how.' + step | translate }}
+      </li>
+    }
+  </ol>
+
+  <p class="privacy">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <rect x="4" y="11" width="16" height="10" rx="2" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+    </svg>
+    {{ 'connect.privacy' | translate }}
+  </p>
+
+  <section class="pick" aria-labelledby="connect-pick-heading">
+    <h2 id="connect-pick-heading">{{ 'connect.pickTitle' | translate }}</h2>
+    <div class="pick__grid">
+      @for (app of apps; track app.id) {
+        <label class="pick__item" [for]="'connect-pick-' + app.id">
+          <input
+            type="checkbox"
+            [id]="'connect-pick-' + app.id"
+            [checked]="selected().has(app.id)"
+            (change)="toggle(app.id, $event)"
+          />
+          <span>
+            <strong>{{ 'connect.apps.' + app.id + '.name' | translate }}</strong>
+            <small>{{ 'connect.apps.' + app.id + '.summary' | translate }}</small>
+          </span>
+        </label>
+      }
+    </div>
+  </section>
+
+  <div class="cards">
+    @for (app of selectedApps(); track app.id) {
+      <app-connect-app-card
+        [app]="app"
+        [values]="valuesFor(app.id)"
+        [redirectUri]="redirectUri()"
+        [ready]="isReady(app)"
+        (valueChange)="setValue(app.id, $event)"
+      />
+    } @empty {
+      <p class="empty">{{ 'connect.empty' | translate }}</p>
+    }
+  </div>
+
+  @if (selectedApps().length) {
+    <section class="sheet" aria-labelledby="connect-sheet-heading">
+      <div class="sheet__head">
+        <h2 id="connect-sheet-heading">{{ 'connect.sheet.title' | translate }}</h2>
+        <span class="sheet__progress" role="status">
+          {{
+            'connect.sheet.progress'
+              | translate: { ready: readyCount(), total: selectedApps().length }
+          }}
+        </span>
+      </div>
+      <p>{{ 'connect.sheet.hint' | translate }}</p>
+      <pre
+        class="connect-code sheet__text"
+        dir="ltr"
+        tabindex="0"
+        [attr.aria-label]="'connect.sheet.title' | translate"
+        >{{ sheet() }}</pre>
+      <div class="sheet__actions">
+        <button type="button" class="connect-btn" (click)="copySheet()">
+          {{
+            (sheetCopy() === 'copied' ? 'connect.sheet.copied' : 'connect.sheet.copy') | translate
+          }}
+        </button>
+        <a
+          class="connect-btn connect-btn--ghost"
+          [href]="oneTimeSecretUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {{ 'connect.sheet.openSafeLink' | translate }}
+          <span class="visually-hidden">{{ 'connect.card.newTab' | translate }}</span>
+        </a>
+      </div>
+      @if (sheetCopy() === 'failed') {
+        <p class="sheet__status" role="status">{{ 'connect.sheet.copyFailed' | translate }}</p>
+      }
+      <p class="sheet__safe">
+        <strong>{{ 'connect.sheet.safeTitle' | translate }}</strong>
+        {{ 'connect.sheet.safeText' | translate }}
+      </p>
+    </section>
+  }
+
+  <p class="help">
+    {{ 'connect.help.text' | translate }}
+    <a [routerLink]="['/', i18n.lang(), 'contact']">{{ 'connect.help.link' | translate }}</a>
+  </p>
+</article>

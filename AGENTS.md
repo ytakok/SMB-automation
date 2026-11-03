@@ -13,7 +13,9 @@ Where this file and a skill disagree, **this file wins**; it describes how this 
 ## 1. What this project is
 
 - Marketing website for **SMB Automation**: pages Home, Services, About, Contact, Not found,
-  plus an n8n chatbot widget on Home.
+  plus an n8n chatbot widget on Home, and a customer onboarding page **Connect** (`/connect`,
+  not in the nav, `noindex`, not in the sitemap) that guides customers through creating the
+  keys n8n needs (WhatsApp, Google, Microsoft 365, HubSpot, Pipedrive, Gemini).
 - **Angular 21** (standalone components, signals, zoneless), **Less**, **ngx-translate 18**,
   **Firebase 13** (Firestore Lite only), **Vitest** via `ng test`.
 - **Static site (SSG):** every page is prerendered at build time for every language
@@ -46,7 +48,7 @@ src/
   app/
     app.routes.ts            language-prefixed, lazy-loaded routes (+ SEO keys in route data)
     app.routes.server.ts     prerender list = routes.manifest.json × tenant languages
-    routes.manifest.json     ["", "about", "services", "contact", "not-found"]  ← add new pages here
+    routes.manifest.json     ["", "about", "services", "contact", "connect", "not-found"]  ← add new pages here
     app.config.ts            browser providers (router, http, hydration, translate, error handler)
     app.config.server.ts     server/prerender providers (FsTranslateLoader reads JSON from disk)
     core/
@@ -61,8 +63,11 @@ src/
     features/<page>/         <page>.page.ts|html|less|spec.ts  (one folder per route)
       contact/               reactive form + contact.validators.ts
       chatbot/               n8n chat widget (used on Home)
+      connect/               customer onboarding: connect-apps.ts (apps, direct links, paste fields),
+                             app card component, ClipboardService. Values stay in signals only:
+                             never saved, sent or logged. Texts in `connect.*` translations.
   environments/environment.ts  version + public Firebase web config
-  styles/                    _tokens.less (CSS variables), _base, _a11y, _forms, _breakpoints
+  styles/                    _tokens.less (CSS variables), _base, _a11y, _forms, _connect, _breakpoints
   styles.less                global entry (imports the files above + shell styles)
   tenants/<id>/              theme.less (CSS-variable overrides), active-tenant.ts (build binding)
 public/
@@ -160,6 +165,15 @@ Global defaults: `src/styles/_tokens.less`. Tenant branding: `src/tenants/<id>/t
    `requiredRouteKeys` in `scripts/check-i18n.mjs`.
 5. Optional nav item in `tenant.json` `nav` (+ `nav.pricing` translation).
 6. Spec: renders one `<h1>`, key content, links. Run the definition of done (§8).
+
+### Add or change an app on the Connect page
+
+1. Add or edit the entry in `src/app/features/connect/connect-apps.ts` (id, minutes, n8n credential
+   name, steps with `link` / `copyRedirect` / `note` / `fields`).
+2. Add `connect.apps.<id>` (name, summary, `steps[i].text|button|note`, `fields.<key>`) to en + he.
+   Step text may use `<b>` for the exact button names customers click.
+3. The OAuth redirect URI is `automation.n8nBaseUrl` from `tenant.json` followed by
+   `/rest/oauth2-credential/callback`.
 
 ### Add a form that saves to Firestore
 

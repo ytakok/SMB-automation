@@ -22,6 +22,10 @@ export interface TenantConfig {
   contact: {
     email: string;
   };
+  /** Agency automation backend; the /connect page builds the OAuth redirect URI from it. */
+  automation?: {
+    n8nBaseUrl: string;
+  };
   social: string[];
   nav: Array<{
     path: string;

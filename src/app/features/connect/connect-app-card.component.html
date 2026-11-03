@@ -1,0 +1,96 @@
+<section class="app-card" [attr.aria-labelledby]="'connect-' + app().id + '-title'">
+  <header class="app-card__head">
+    <h2 [id]="'connect-' + app().id + '-title'">{{ key('name') | translate }}</h2>
+    <span class="app-card__time">
+      {{ 'connect.card.minutes' | translate: { count: app().minutes } }}
+    </span>
+    <span class="app-card__status" [class.is-ready]="ready()" role="status">
+      {{ (ready() ? 'connect.card.ready' : 'connect.card.waiting') | translate }}
+    </span>
+  </header>
+
+  <ol class="app-card__steps">
+    @for (step of app().steps; track $index; let i = $index) {
+      <li class="app-step">
+        <span class="app-step__num" aria-hidden="true">{{ i + 1 }}</span>
+        <div class="app-step__body">
+          <p [innerHTML]="key('steps.' + i + '.text') | translate"></p>
+
+          @if (step.link) {
+            <a class="connect-btn" [href]="step.link" target="_blank" rel="noopener noreferrer">
+              {{ key('steps.' + i + '.button') | translate }}
+              <svg
+                class="connect-btn__icon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M7 17 17 7M8 7h9v9" />
+              </svg>
+              <span class="visually-hidden">{{ 'connect.card.newTab' | translate }}</span>
+            </a>
+          }
+
+          @if (step.copyRedirect) {
+            <div class="copy-row">
+              <code class="connect-code" dir="ltr">{{ redirectUri() }}</code>
+              <button type="button" class="connect-btn connect-btn--ghost" (click)="copyRedirect()">
+                {{
+                  (copyState() === 'copied' ? 'connect.card.copied' : 'connect.card.copy')
+                    | translate
+                }}
+              </button>
+            </div>
+            @if (copyState() === 'failed') {
+              <p class="app-step__note" role="status">
+                {{ 'connect.card.copyFailed' | translate }}
+              </p>
+            }
+          }
+
+          @if (step.note) {
+            <p class="app-step__note">{{ key('steps.' + i + '.note') | translate }}</p>
+          }
+
+          @for (field of step.fields ?? []; track field.key) {
+            <div class="field">
+              <label [for]="fieldId(field)">{{ key('fields.' + field.key) | translate }}</label>
+              <div class="paste-row">
+                <input
+                  [id]="fieldId(field)"
+                  [type]="field.secret && !isRevealed(field.key) ? 'password' : 'text'"
+                  dir="ltr"
+                  autocomplete="off"
+                  spellcheck="false"
+                  [attr.aria-required]="!field.optional"
+                  [placeholder]="field.example ?? ''"
+                  [value]="values()[field.key] ?? ''"
+                  (input)="onInput(field.key, $event)"
+                />
+                @if (field.secret) {
+                  <button
+                    type="button"
+                    class="connect-btn connect-btn--ghost"
+                    [attr.aria-controls]="fieldId(field)"
+                    [attr.aria-pressed]="isRevealed(field.key)"
+                    (click)="toggleReveal(field.key)"
+                  >
+                    {{
+                      (isRevealed(field.key) ? 'connect.card.hide' : 'connect.card.show')
+                        | translate
+                    }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </li>
+    }
+  </ol>
+</section>

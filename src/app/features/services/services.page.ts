@@ -10,4 +10,5 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class ServicesPage {
   protected readonly services = [0, 1, 2, 3];
+  protected readonly faqs = [0, 1, 2, 3];
 }

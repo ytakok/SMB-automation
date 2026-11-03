@@ -47,6 +47,10 @@ export const routes: Routes = [
           seo: {
             titleKey: 'services.seo.title',
             descriptionKey: 'services.seo.description',
+            faq: [0, 1, 2, 3].map((index) => ({
+              questionKey: `services.faq.items.${index}.question`,
+              answerKey: `services.faq.items.${index}.answer`,
+            })),
           },
         },
       },
@@ -58,6 +62,18 @@ export const routes: Routes = [
           seo: {
             titleKey: 'contact.seo.title',
             descriptionKey: 'contact.seo.description',
+          },
+        },
+      },
+      {
+        path: 'connect',
+        loadComponent: () =>
+          import('./features/connect/connect.page').then((module) => module.ConnectPage),
+        data: {
+          seo: {
+            titleKey: 'connect.seo.title',
+            descriptionKey: 'connect.seo.description',
+            robots: 'noindex',
           },
         },
       },

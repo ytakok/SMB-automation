@@ -1,12 +1,30 @@
 # SMB Automation
 
-SMB Automation helps small and growing businesses reduce repetitive work, connect business software, and improve everyday processes.
+SMB Automation helps small and growing businesses reduce repetitive work, connect business software, and improve everyday processes. The site is available in English and Hebrew.
 
 ## Services
-- Workflow automation
-- Business systems integration
-- Practical AI enablement
-- Process improvement
+- Workflow automation: repetitive tasks, notifications, approvals, and handoffs.
+- Business systems integration: workflows involving CRMs, forms, email, calendars, and internal tools; integration options depend on the systems used.
+- Practical AI enablement: identify suitable tasks, define data boundaries, and include human review where appropriate.
+- Process improvement: map current workflows, find bottlenecks, and prioritize changes by effort and business value.
+
+## How engagements work
+Start by understanding the existing process and the tools the team uses. Identify a useful bottleneck, choose a practical improvement, and deliver it in manageable steps with documentation.
+
+## Common questions
+- What can be automated? Repetitive notifications, approvals, handoffs, and movement of information between tools can be candidates; suitability depends on the process and software.
+- Can existing tools be connected? Often, but available integrations depend on each system's capabilities.
+- How is the first improvement chosen? Map the current process and prioritize bottlenecks by effort and business value.
+- Is AI required? No. AI is considered only when it fits the task, with data boundaries and human review where appropriate.
+
+## Pages
+- Home: https://smb-automation.example/en
+- Services: https://smb-automation.example/en/services
+- About: https://smb-automation.example/en/about
+- Contact: https://smb-automation.example/en/contact
+- Hebrew home: https://smb-automation.example/he
+- Hebrew services: https://smb-automation.example/he/services
+- Sitemap: https://smb-automation.example/sitemap.xml
 
 ## Contact
 Email: hello@smb-automation.example

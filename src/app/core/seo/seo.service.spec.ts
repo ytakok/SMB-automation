@@ -16,7 +16,10 @@ class SeoTestLoader implements TranslateLoader {
   getTranslation(_lang: string): Observable<TranslationObject> {
     return of({
       nav: { home: 'Home' },
-      home: { seo: { title: 'Business automation', description: 'Helpful automation.' } },
+      home: {
+        seo: { title: 'Business automation', description: 'Helpful automation.' },
+        faq: { question: 'Frequently asked question?', answer: 'A useful answer.' },
+      },
     });
   }
 }
@@ -33,6 +36,12 @@ describe('SeoService', () => {
               seo: {
                 titleKey: 'home.seo.title',
                 descriptionKey: 'home.seo.description',
+                faq: [
+                  {
+                    questionKey: 'home.faq.question',
+                    answerKey: 'home.faq.answer',
+                  },
+                ],
               },
             },
           },
@@ -65,5 +74,18 @@ describe('SeoService', () => {
         '@type'
       ],
     ).toBe('Organization');
+    const graph = JSON.parse(document.querySelector('#structured-data')?.textContent ?? '{}')[
+      '@graph'
+    ];
+    expect(graph.find((item: { '@type': string }) => item['@type'] === 'FAQPage')).toEqual({
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Frequently asked question?',
+          acceptedAnswer: { '@type': 'Answer', text: 'A useful answer.' },
+        },
+      ],
+    });
   });
 });

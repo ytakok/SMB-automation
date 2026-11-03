@@ -11,6 +11,7 @@ interface SeoData {
   titleKey?: string;
   descriptionKey?: string;
   robots?: string;
+  faq?: Array<{ questionKey: string; answerKey: string }>;
 }
 
 @Injectable()
@@ -77,7 +78,7 @@ export class SeoService {
     });
     this.setLink('canonical', canonical);
     this.setAlternates();
-    this.setStructuredData(config.name, canonical, pathname);
+    this.setStructuredData(config.name, canonical, pathname, seo.faq ?? []);
   }
 
   private setLink(rel: string, href: string, hreflang?: string): void {
@@ -111,7 +112,12 @@ export class SeoService {
     );
   }
 
-  private setStructuredData(name: string, url: string, pathname: string): void {
+  private setStructuredData(
+    name: string,
+    url: string,
+    pathname: string,
+    faq: SeoData['faq'],
+  ): void {
     const tenant = this.tenant.config();
     const segments = pathname.split('/').filter(Boolean).slice(1);
     const data = {
@@ -148,6 +154,21 @@ export class SeoService {
                     item: url,
                   },
                 ],
+              },
+            ]
+          : []),
+        ...(faq?.length
+          ? [
+              {
+                '@type': 'FAQPage',
+                mainEntity: faq.map(({ questionKey, answerKey }) => ({
+                  '@type': 'Question',
+                  name: this.translate.instant(questionKey),
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: this.translate.instant(answerKey),
+                  },
+                })),
               },
             ]
           : []),

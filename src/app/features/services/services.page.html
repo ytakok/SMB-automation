@@ -15,5 +15,15 @@
     }
   </section>
 
+  <section class="faq-section" aria-labelledby="services-faq-heading">
+    <h2 id="services-faq-heading">{{ 'services.faq.title' | translate }}</h2>
+    @for (faq of faqs; track faq) {
+      <article class="faq-item">
+        <h3>{{ 'services.faq.items.' + faq + '.question' | translate }}</h3>
+        <p>{{ 'services.faq.items.' + faq + '.answer' | translate }}</p>
+      </article>
+    }
+  </section>
+
   <a class="button" routerLink="../contact">{{ 'common.contact' | translate }}</a>
 </article>

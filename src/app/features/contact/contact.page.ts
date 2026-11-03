@@ -41,7 +41,6 @@ export class ContactPage {
   /** True after the first submit attempt, so all errors become visible. */
   protected readonly submitAttempted = signal(false);
 
-  private readonly errorSummary = viewChild<ElementRef<HTMLElement>>('errorSummary');
   private readonly successHeading = viewChild<ElementRef<HTMLElement>>('successHeading');
 
   protected readonly form = inject(NonNullableFormBuilder).group({
@@ -80,11 +79,6 @@ export class ContactPage {
     return `${base}.invalid`;
   }
 
-  /** Fields with a visible error, in form order, for the error summary. */
-  protected invalidFields(): ContactField[] {
-    return FIELD_ORDER.filter((field) => this.errorKey(field) !== null);
-  }
-
   protected async submit(): Promise<void> {
     if (this.status() === 'submitting') {
       return;
@@ -94,7 +88,7 @@ export class ContactPage {
 
     if (this.form.invalid) {
       this.status.set('idle');
-      this.focusAfterRender(this.errorSummary);
+      this.focusFirstInvalidField();
       return;
     }
 
@@ -112,12 +106,6 @@ export class ContactPage {
     }
   }
 
-  /** Error-summary links move focus to the field instead of changing the URL hash. */
-  protected focusField(event: Event, field: ContactField): void {
-    event.preventDefault();
-    this.document.getElementById(`contact-${field}`)?.focus();
-  }
-
   protected startOver(): void {
     this.status.set('idle');
   }
@@ -125,5 +113,17 @@ export class ContactPage {
   /** Moves focus once the element exists, so screen readers announce the result. */
   private focusAfterRender(target: () => ElementRef<HTMLElement> | undefined): void {
     afterNextRender(() => target()?.nativeElement.focus(), { injector: this.injector });
+  }
+
+  private focusFirstInvalidField(): void {
+    afterNextRender(
+      () => {
+        const field = FIELD_ORDER.find((candidate) => this.errorKey(candidate) !== null);
+        if (field) {
+          this.document.getElementById(`contact-${field}`)?.focus();
+        }
+      },
+      { injector: this.injector },
+    );
   }
 }

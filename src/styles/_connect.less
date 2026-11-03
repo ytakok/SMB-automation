@@ -1,0 +1,55 @@
+/*
+ * Shared by the /connect page and its app cards (global so both stay under the
+ * 4 kB component style budget). Big, obvious buttons for non-technical customers.
+ */
+.connect-btn {
+  display: inline-flex;
+  min-block-size: var(--target-min);
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+
+  &:hover {
+    border-color: var(--color-primary-hover);
+    background: var(--color-primary-hover);
+  }
+}
+
+.connect-btn--ghost {
+  padding-inline: var(--space-4);
+  background: transparent;
+  color: var(--color-primary);
+
+  &:hover {
+    background: var(--color-tint);
+    color: var(--color-primary-hover);
+  }
+}
+
+.connect-btn__icon {
+  flex: none;
+}
+
+.connect-code {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  overflow-x: auto;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+  font-size: var(--fs-100);
+  white-space: nowrap;
+}

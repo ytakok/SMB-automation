@@ -14,6 +14,7 @@ describe('ServicesPage', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelectorAll('.service-card')).toHaveLength(4);
+    expect(fixture.nativeElement.querySelectorAll('.faq-item')).toHaveLength(4);
     expect(fixture.nativeElement.querySelector('a.button')).toBeTruthy();
   });
 });

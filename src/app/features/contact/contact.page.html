@@ -65,27 +65,6 @@
           <span aria-hidden="true">*</span> {{ 'contact.form.requiredNote' | translate }}
         </p>
 
-        @if (submitAttempted() && invalidFields().length) {
-          <div
-            class="error-summary"
-            #errorSummary
-            tabindex="-1"
-            role="group"
-            aria-labelledby="error-summary-title"
-          >
-            <h3 id="error-summary-title">{{ 'contact.form.summaryTitle' | translate }}</h3>
-            <ul role="list">
-              @for (field of invalidFields(); track field) {
-                <li>
-                  <a [href]="'#contact-' + field" (click)="focusField($event, field)">{{
-                    errorKey(field)! | translate
-                  }}</a>
-                </li>
-              }
-            </ul>
-          </div>
-        }
-
         @if (status() === 'error') {
           <div class="form-alert" role="alert">
             <p class="form-alert__title">{{ 'contact.form.failure.title' | translate }}</p>
@@ -109,6 +88,7 @@
               type="text"
               formControlName="fullName"
               autocomplete="name"
+              [placeholder]="'contact.form.fullName.placeholder' | translate"
               required
               [attr.maxlength]="limits.fullNameMax"
               [attr.aria-invalid]="errorKey('fullName') ? 'true' : null"
@@ -132,6 +112,7 @@
               formControlName="email"
               autocomplete="email"
               spellcheck="false"
+              [placeholder]="'contact.form.email.placeholder' | translate"
               required
               [attr.maxlength]="limits.emailMax"
               [attr.aria-invalid]="errorKey('email') ? 'true' : null"
@@ -154,16 +135,12 @@
               inputmode="tel"
               formControlName="phone"
               autocomplete="tel"
+              [placeholder]="'contact.form.phone.placeholder' | translate"
               required
               [attr.maxlength]="limits.phoneMax"
               [attr.aria-invalid]="errorKey('phone') ? 'true' : null"
-              [attr.aria-describedby]="
-                errorKey('phone') ? 'contact-phone-hint contact-phone-error' : 'contact-phone-hint'
-              "
+              [attr.aria-describedby]="errorKey('phone') ? 'contact-phone-error' : null"
             />
-            <p class="field__hint" id="contact-phone-hint">
-              {{ 'contact.form.phone.hint' | translate }}
-            </p>
             @if (errorKey('phone'); as key) {
               <p class="field__error" id="contact-phone-error">{{ key | translate }}</p>
             }
@@ -174,20 +151,14 @@
               {{ 'contact.form.message.label' | translate }}
               <span class="field__optional">{{ 'contact.form.optional' | translate }}</span>
             </label>
-            <p class="field__hint" id="contact-message-hint">
-              {{ 'contact.form.message.hint' | translate }}
-            </p>
             <textarea
               id="contact-message"
               rows="6"
               formControlName="message"
+              [placeholder]="'contact.form.message.placeholder' | translate"
               [attr.maxlength]="limits.messageMax"
               [attr.aria-invalid]="errorKey('message') ? 'true' : null"
-              [attr.aria-describedby]="
-                errorKey('message')
-                  ? 'contact-message-hint contact-message-error'
-                  : 'contact-message-hint'
-              "
+              [attr.aria-describedby]="errorKey('message') ? 'contact-message-error' : null"
             ></textarea>
             <p class="field__counter" aria-hidden="true">
               {{ form.controls.message.value.length }} / {{ limits.messageMax }}

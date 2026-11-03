@@ -108,6 +108,27 @@
         "description": "Document the current workflow, identify bottlenecks, and prioritize changes based on effort and business value."
       }
     ],
+    "faq": {
+      "title": "Common questions about business automation",
+      "items": [
+        {
+          "question": "What kinds of business tasks can be automated?",
+          "answer": "Repetitive tasks such as notifications, approvals, handoffs, and moving information between tools are often good candidates. The right scope depends on how your process works and which systems your team uses."
+        },
+        {
+          "question": "Can you connect the tools our business already uses?",
+          "answer": "We work with workflows involving tools such as CRMs, forms, email, calendars, and internal systems. The available integration depends on the specific tools and their capabilities."
+        },
+        {
+          "question": "How do you decide what to automate first?",
+          "answer": "We map the current process, identify a bottleneck, and prioritize practical changes by effort and business value. Improvements are delivered in manageable steps with documentation for your team."
+        },
+        {
+          "question": "Does SMB Automation use AI in business workflows?",
+          "answer": "AI is considered when it suits the task, especially repetitive work. We define data boundaries and keep human review in the workflow where it is appropriate."
+        }
+      ]
+    },
     "seo": {
       "title": "Business automation services",
       "description": "Explore workflow automation, systems integration, practical AI, and process improvement services for small businesses."
@@ -128,11 +149,11 @@
       "title": "Send us a request",
       "requiredNote": "Required fields are marked with an asterisk.",
       "optional": "(optional)",
-      "summaryTitle": "Please fix the following:",
       "submit": "Send request",
       "submitting": "Sending…",
       "fullName": {
         "label": "Full name",
+        "placeholder": "e.g. Dana Levi",
         "errors": {
           "required": "Please enter your full name.",
           "minlength": "Full name must be at least 2 characters.",
@@ -141,6 +162,7 @@
       },
       "email": {
         "label": "Email",
+        "placeholder": "name@company.com",
         "errors": {
           "required": "Please enter your email address.",
           "invalid": "Please enter a valid email address, for example name@company.com.",
@@ -149,7 +171,7 @@
       },
       "phone": {
         "label": "Phone number",
-        "hint": "Include the area code, for example 050-123-4567.",
+        "placeholder": "e.g. +1234567890",
         "errors": {
           "required": "Please enter your phone number.",
           "invalid": "Please enter a valid phone number with 7 to 15 digits."
@@ -157,7 +179,7 @@
       },
       "message": {
         "label": "How can we help?",
-        "hint": "Tell us about the process or tools you would like to improve.",
+        "placeholder": "Briefly describe the process you'd like to improve.",
         "errors": {
           "maxlength": "Your message can be up to 2,000 characters."
         }
@@ -180,6 +202,176 @@
     "seo": {
       "title": "Page not found",
       "description": "The requested page could not be found."
+    }
+  },
+  "connect": {
+    "eyebrow": "Connect your apps",
+    "title": "Connect your apps in a few clicks",
+    "intro": "Your automations need permission to work with your apps. For each app below, press the blue buttons in order and paste what you see. No technical knowledge needed.",
+    "howLabel": "How it works",
+    "how": [
+      "Tick the apps you use",
+      "Press each blue button and copy what you see",
+      "Send us the finished sheet"
+    ],
+    "privacy": "What you paste stays in this browser tab. Nothing is saved or sent until you copy it yourself. Closing the tab clears everything.",
+    "pickTitle": "Which apps do you use?",
+    "empty": "Tick at least one app above to see its steps.",
+    "card": {
+      "minutes": "About {{count}} min",
+      "ready": "Ready",
+      "waiting": "Not finished",
+      "newTab": "(opens in a new tab)",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyFailed": "Copying didn't work. Select the address with your mouse and copy it.",
+      "show": "Show",
+      "hide": "Hide"
+    },
+    "apps": {
+      "whatsapp": {
+        "name": "WhatsApp Business",
+        "summary": "Send and answer customer messages",
+        "steps": [
+          {
+            "text": "Create a WhatsApp app. Choose <b>Connect with customers through WhatsApp</b>, give it any name, and pick your business.",
+            "button": "Open Meta for Developers"
+          },
+          {
+            "text": "Open your new app, then <b>WhatsApp → API Setup</b>. Add your business phone number. Copy the two numbers shown and paste them here.",
+            "button": "Open my Meta apps",
+            "note": "Use a number that is not on the regular WhatsApp app. If it is, delete that WhatsApp account first or use a new number."
+          },
+          {
+            "text": "Create a key that never expires. Press <b>Add</b>, name it <b>n8n</b> and choose <b>Admin</b>. Press <b>Assign assets</b> and pick your app and your WhatsApp account. Then press <b>Generate token</b>, choose <b>Never</b>, tick <b>whatsapp_business_messaging</b> and <b>whatsapp_business_management</b>, and copy the token.",
+            "button": "Open system users"
+          },
+          {
+            "text": "So we can answer messages your customers send: in your app, open <b>App settings → Basic</b> and copy the App ID and App secret.",
+            "button": "Open my Meta apps"
+          }
+        ],
+        "fields": {
+          "phoneNumberId": "Phone number ID",
+          "businessAccountId": "WhatsApp Business Account ID",
+          "accessToken": "Access token",
+          "appId": "App ID",
+          "appSecret": "App secret"
+        }
+      },
+      "google": {
+        "name": "Google",
+        "summary": "Gmail, Sheets, Calendar, Drive",
+        "steps": [
+          {
+            "text": "Create a project. Type <b>Automations</b> as the name and press <b>Create</b>.",
+            "button": "Create a Google project"
+          },
+          {
+            "text": "Turn on Gmail, Sheets, Drive and Calendar in one go. Check that <b>Automations</b> is selected at the top, then press <b>Next</b> and <b>Enable</b>.",
+            "button": "Turn on Google apps"
+          },
+          {
+            "text": "Set up the sign-in screen. Press <b>Get started</b>, type <b>Automations</b> as the app name, choose your email, pick <b>Internal</b>, and press <b>Create</b>.",
+            "button": "Set up the sign-in screen",
+            "note": "Using a free @gmail.com address? Choose External instead. Then open Audience and press Publish app, or the connection stops after 7 days."
+          },
+          {
+            "text": "Create the key. Choose <b>Web application</b>. Under <b>Authorized redirect URIs</b> press <b>Add URI</b>, paste the address below, and press <b>Create</b>. Copy the two values shown.",
+            "button": "Create the key"
+          }
+        ],
+        "fields": {
+          "clientId": "Client ID",
+          "clientSecret": "Client secret"
+        }
+      },
+      "microsoft": {
+        "name": "Microsoft 365",
+        "summary": "Outlook, Excel, OneDrive, Teams",
+        "steps": [
+          {
+            "text": "Register the app. Type <b>Automations</b> as the name. Under <b>Supported account types</b> choose <b>Accounts in any organizational directory</b>. Under <b>Redirect URI</b> choose <b>Web</b>, paste the address below, and press <b>Register</b>.",
+            "button": "Open Microsoft app registration"
+          },
+          {
+            "text": "On the page that opens, copy the two IDs and paste them here."
+          },
+          {
+            "text": "Create a password for the app: <b>Certificates & secrets</b> → <b>New client secret</b> → <b>Add</b>. Copy the <b>Value</b> right away.",
+            "note": "Copy the Value column, not the Secret ID. The value is shown only once."
+          }
+        ],
+        "fields": {
+          "clientId": "Application (client) ID",
+          "tenantId": "Directory (tenant) ID",
+          "clientSecret": "Client secret value"
+        }
+      },
+      "hubspot": {
+        "name": "HubSpot",
+        "summary": "Contacts, companies and deals",
+        "steps": [
+          {
+            "text": "Open Private apps and press <b>Create a private app</b>. Type <b>Automations</b> as the name.",
+            "button": "Open HubSpot private apps"
+          },
+          {
+            "text": "Open the <b>Scopes</b> tab. Search for <b>contacts</b>, <b>companies</b> and <b>deals</b>, and tick read and write for each. Press <b>Create app</b>."
+          },
+          {
+            "text": "Press <b>Show token</b>, then <b>Copy</b>, and paste it here."
+          }
+        ],
+        "fields": {
+          "token": "Access token"
+        }
+      },
+      "pipedrive": {
+        "name": "Pipedrive",
+        "summary": "Deals, people and activities",
+        "steps": [
+          {
+            "text": "Copy your personal API token and paste it here.",
+            "button": "Open the Pipedrive API page"
+          }
+        ],
+        "fields": {
+          "token": "API token"
+        }
+      },
+      "gemini": {
+        "name": "Google Gemini",
+        "summary": "AI for summaries and replies",
+        "steps": [
+          {
+            "text": "Press <b>Create API key</b>, choose your <b>Automations</b> project, and copy the key.",
+            "button": "Open Google AI Studio"
+          }
+        ],
+        "fields": {
+          "apiKey": "API key"
+        }
+      }
+    },
+    "sheet": {
+      "title": "Your connection sheet",
+      "progress": "{{ready}} of {{total}} apps ready",
+      "hint": "This fills in by itself as you paste. When every app says Ready, copy it and send it to us.",
+      "copy": "Copy the sheet",
+      "copied": "Copied",
+      "copyFailed": "Copying didn't work. Select the text in the box and copy it.",
+      "openSafeLink": "Open a safe sharing link",
+      "safeTitle": "Please don't send it by regular email or WhatsApp.",
+      "safeText": "Open the safe sharing link, paste the sheet, press Create a secret link, and send us only that link. It opens once and then deletes itself."
+    },
+    "help": {
+      "text": "Stuck on a step?",
+      "link": "Ask us and we'll do it together on a short call."
+    },
+    "seo": {
+      "title": "Connect your apps",
+      "description": "Simple steps to connect WhatsApp, Gmail, Google Sheets, Calendar, Microsoft 365 and your CRM to your automation workflows."
     }
   }
 }
