@@ -1,0 +1,131 @@
+<article class="integrations-page">
+  <header class="page-heading">
+    <p class="eyebrow">{{ 'integrations.eyebrow' | translate }}</p>
+    <h1>{{ 'integrations.title' | translate }}</h1>
+    <p class="lead">{{ 'integrations.intro' | translate }}</p>
+  </header>
+
+  @if (result(); as done) {
+    <div
+      class="result"
+      [class.result--error]="done.status === 'error'"
+      [attr.role]="done.status === 'error' ? 'alert' : 'status'"
+    >
+      <h2 #resultHeading tabindex="-1">
+        {{
+          'integrations.result.' + done.status + '.title'
+            | translate
+              : { provider: ('integrations.providers.' + done.provider + '.name' | translate) }
+        }}
+      </h2>
+      @if (done.status === 'error') {
+        <p>{{ 'integrations.result.error.' + done.reason | translate }}</p>
+      } @else {
+        <p>{{ 'integrations.result.connected.text' | translate }}</p>
+      }
+    </div>
+  }
+
+  <ol class="how" [attr.aria-label]="'integrations.howLabel' | translate">
+    @for (step of howSteps; track step) {
+      <li>
+        <span class="how__num" aria-hidden="true">{{ step + 1 }}</span>
+        {{ 'integrations.how.' + step | translate }}
+      </li>
+    }
+  </ol>
+
+  <div class="field code" [class.field--invalid]="codeInvalid()">
+    <label for="integrations-code">
+      {{ 'integrations.code.label' | translate }}
+      <span class="field__required" aria-hidden="true">*</span>
+    </label>
+    <p id="integrations-code-hint" class="field__hint">
+      {{ 'integrations.code.hint' | translate }}
+    </p>
+    <input
+      #codeInput
+      id="integrations-code"
+      type="text"
+      dir="ltr"
+      autocomplete="off"
+      autocapitalize="characters"
+      spellcheck="false"
+      required
+      [formControl]="inviteCode"
+      [attr.aria-invalid]="codeInvalid()"
+      [attr.aria-describedby]="
+        codeInvalid() ? 'integrations-code-hint integrations-code-error' : 'integrations-code-hint'
+      "
+      (blur)="codeTouched.set(true)"
+    />
+    @if (codeInvalid()) {
+      <p id="integrations-code-error" class="field__error">{{ codeErrorKey() | translate }}</p>
+    }
+  </div>
+
+  <div class="providers">
+    @for (provider of providers; track provider.id) {
+      <section class="provider" [attr.aria-labelledby]="'integrations-' + provider.id + '-title'">
+        <h2 [id]="'integrations-' + provider.id + '-title'">
+          {{ 'integrations.providers.' + provider.id + '.name' | translate }}
+        </h2>
+        <p class="provider__summary">
+          {{ 'integrations.providers.' + provider.id + '.summary' | translate }}
+        </p>
+        <h3>{{ 'integrations.accessTitle' | translate }}</h3>
+        <ul class="provider__access">
+          @for (index of accessIndexes(provider); track index) {
+            <li>{{ 'integrations.providers.' + provider.id + '.access.' + index | translate }}</li>
+          }
+        </ul>
+        <button
+          type="button"
+          class="connect-btn"
+          [attr.aria-busy]="isStarting(provider)"
+          [disabled]="state().status === 'starting'"
+          (click)="connect(provider)"
+        >
+          {{
+            (isStarting(provider)
+              ? 'integrations.starting'
+              : 'integrations.providers.' + provider.id + '.button'
+            ) | translate
+          }}
+        </button>
+        @if (errorFor(provider); as kind) {
+          <p class="form-alert" role="alert">{{ 'integrations.errors.' + kind | translate }}</p>
+        }
+        <p class="provider__revoke">
+          {{ 'integrations.providers.' + provider.id + '.revoke' | translate }}
+          <a [href]="provider.revokeUrl" target="_blank" rel="noopener noreferrer">
+            {{ 'integrations.revokeLink' | translate }}
+            <span class="visually-hidden">{{ 'integrations.newTab' | translate }}</span>
+          </a>
+        </p>
+      </section>
+    }
+  </div>
+
+  <p class="privacy">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <rect x="4" y="11" width="16" height="10" rx="2" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+    </svg>
+    {{ 'integrations.privacy' | translate }}
+  </p>
+
+  <p class="help">
+    {{ 'integrations.help.text' | translate }}
+    <a [routerLink]="['/', i18n.lang(), 'contact']">{{ 'integrations.help.link' | translate }}</a>
+  </p>
+</article>

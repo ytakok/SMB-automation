@@ -78,6 +78,20 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'integrations',
+        loadComponent: () =>
+          import('./features/integrations/integrations.page').then(
+            (module) => module.IntegrationsPage,
+          ),
+        data: {
+          seo: {
+            titleKey: 'integrations.seo.title',
+            descriptionKey: 'integrations.seo.description',
+            robots: 'noindex',
+          },
+        },
+      },
+      {
         path: 'not-found',
         loadComponent: () =>
           import('./features/not-found/not-found.page').then((module) => module.NotFoundPage),

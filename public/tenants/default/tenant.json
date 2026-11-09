@@ -19,7 +19,8 @@
     "email": "hello@smb-automation.example"
   },
   "automation": {
-    "n8nBaseUrl": "https://n8n.34-71-188-154.sslip.io"
+    "n8nBaseUrl": "https://n8n.34-71-188-154.sslip.io",
+    "webhookBaseUrl": "https://smb.34-71-188-154.sslip.io"
   },
   "social": [],
   "nav": [

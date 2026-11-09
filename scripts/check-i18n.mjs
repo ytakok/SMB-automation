@@ -38,6 +38,8 @@ const requiredRouteKeys = [
   'contact.seo.description',
   'connect.seo.title',
   'connect.seo.description',
+  'integrations.seo.title',
+  'integrations.seo.description',
   'notFound.seo.title',
   'notFound.seo.description',
 ];

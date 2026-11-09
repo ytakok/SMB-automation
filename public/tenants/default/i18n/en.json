@@ -373,5 +373,82 @@
       "title": "Connect your apps",
       "description": "Simple steps to connect WhatsApp, Gmail, Google Sheets, Calendar, Microsoft 365 and your CRM to your automation workflows."
     }
+  },
+  "integrations": {
+    "seo": {
+      "title": "Connect your accounts in one click",
+      "description": "Connect Google or Microsoft 365 to your automations by signing in. No keys or passwords to share."
+    },
+    "eyebrow": "Connect your accounts",
+    "title": "Connect your apps in one click",
+    "intro": "Sign in with your Google or Microsoft account and approve access. Your automations start working right away. We never see your password, and you don't need to create any keys.",
+    "howLabel": "How it works",
+    "how": [
+      "Enter the invite code we sent you",
+      "Choose your account and sign in",
+      "Approve access, and you're done"
+    ],
+    "code": {
+      "label": "Invite code",
+      "hint": "It's in the email we sent you, for example ACME-7F3K. If you opened our link, it's already filled in.",
+      "errors": {
+        "required": "Enter your invite code.",
+        "pattern": "Check the code: use 6 to 64 letters, numbers or dashes."
+      }
+    },
+    "accessTitle": "What your automations can do",
+    "starting": "Opening sign-in…",
+    "revokeLink": "Manage access",
+    "newTab": "(opens in a new tab)",
+    "providers": {
+      "google": {
+        "name": "Google",
+        "summary": "Gmail, Google Calendar, Google Drive and Google Sheets.",
+        "button": "Connect with Google",
+        "access": [
+          "Read and send emails for your automations",
+          "See and book meetings in your calendar",
+          "Save files to the folders your automations use",
+          "Read and update the sheets you choose"
+        ],
+        "revoke": "You can remove our access at any time in your Google account."
+      },
+      "microsoft": {
+        "name": "Microsoft 365",
+        "summary": "Outlook, Outlook Calendar and OneDrive.",
+        "button": "Connect with Microsoft",
+        "access": [
+          "Read and send emails for your automations",
+          "See and book meetings in your calendar",
+          "Save files to OneDrive"
+        ],
+        "revoke": "You can remove our access at any time in your Microsoft account."
+      }
+    },
+    "errors": {
+      "rejected": "This invite code doesn't work. Check it or ask us for a new one.",
+      "timeout": "The connection service didn't answer in time. Try again in a minute.",
+      "network": "We couldn't reach the connection service. Check your internet connection and try again.",
+      "server": "Something went wrong on our side. Try again in a few minutes, or contact us.",
+      "unavailable": "Connecting isn't available right now. Please contact us.",
+      "invalid-response": "Something went wrong on our side. Try again in a few minutes, or contact us."
+    },
+    "result": {
+      "connected": {
+        "title": "{{provider}} is connected",
+        "text": "Thank you. Your automations can now use this account. You can close this page."
+      },
+      "error": {
+        "title": "{{provider}} wasn't connected",
+        "denied": "Access wasn't approved. Press the button again and choose Allow to connect.",
+        "expired": "The sign-in took too long and expired. Press the button to try again.",
+        "failed": "Something went wrong while connecting. Try again, or contact us."
+      }
+    },
+    "privacy": "You sign in on Google's or Microsoft's own page. We never see your password, and our access is limited to what's listed above.",
+    "help": {
+      "text": "Need help or using another app?",
+      "link": "Contact our team"
+    }
   }
 }

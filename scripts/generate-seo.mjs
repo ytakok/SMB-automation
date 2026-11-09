@@ -8,7 +8,7 @@ if (!tenantId || !/^[a-z0-9-]+$/.test(tenantId)) {
 
 const tenant = JSON.parse(readFileSync(resolve(`public/tenants/${tenantId}/tenant.json`), 'utf8'));
 // Pages with robots "noindex" stay out of the sitemap.
-const notInSitemap = ['not-found', 'connect'];
+const notInSitemap = ['not-found', 'connect', 'integrations'];
 const paths = JSON.parse(readFileSync(resolve('src/app/routes.manifest.json'), 'utf8')).filter(
   (path) => !notInSitemap.includes(path),
 );

@@ -22,9 +22,15 @@ export interface TenantConfig {
   contact: {
     email: string;
   };
-  /** Agency automation backend; the /connect page builds the OAuth redirect URI from it. */
+  /** Agency automation backend (n8n). */
   automation?: {
+    /** n8n editor URL; the /connect page builds the OAuth redirect URI from it. */
     n8nBaseUrl: string;
+    /**
+     * Where the site calls n8n webhooks (`<webhookBaseUrl>/webhook/...`). Defaults to n8nBaseUrl.
+     * Use the site's own domain when Caddy proxies `/webhook*` to n8n (no CORS).
+     */
+    webhookBaseUrl?: string;
   };
   social: string[];
   nav: Array<{

@@ -15,7 +15,9 @@ Where this file and a skill disagree, **this file wins**; it describes how this 
 - Marketing website for **SMB Automation**: pages Home, Services, About, Contact, Not found,
   plus an n8n chatbot widget on Home, and a customer onboarding page **Connect** (`/connect`,
   not in the nav, `noindex`, not in the sitemap) that guides customers through creating the
-  keys n8n needs (WhatsApp, Google, Microsoft 365, HubSpot, Pipedrive, Gemini).
+  keys n8n needs (WhatsApp, Google, Microsoft 365, HubSpot, Pipedrive, Gemini), and
+  **Integrations** (`/integrations`, also hidden + `noindex`): the recommended one-click way, where
+  customers sign in with Google / Microsoft and n8n stores the tokens (see `docs/n8n-connections.md`).
 - **Angular 21** (standalone components, signals, zoneless), **Less**, **ngx-translate 18**,
   **Firebase 13** (Firestore Lite only), **Vitest** via `ng test`.
 - **Static site (SSG):** every page is prerendered at build time for every language
@@ -48,7 +50,7 @@ src/
   app/
     app.routes.ts            language-prefixed, lazy-loaded routes (+ SEO keys in route data)
     app.routes.server.ts     prerender list = routes.manifest.json × tenant languages
-    routes.manifest.json     ["", "about", "services", "contact", "connect", "not-found"]  ← add new pages here
+    routes.manifest.json     ["", "about", "services", "contact", "connect", "integrations", "not-found"]  ← add new pages here
     app.config.ts            browser providers (router, http, hydration, translate, error handler)
     app.config.server.ts     server/prerender providers (FsTranslateLoader reads JSON from disk)
     core/
@@ -59,6 +61,9 @@ src/
       logging/               ErrorLogService → Firestore `errorLogs`, GlobalErrorHandler, HTTP interceptor
       firebase/              FirestoreGateway + FIREBASE_CONFIG token (lazy Firestore Lite writes)
       contact/               ContactService → Firestore `contacts`, CONTACT_LIMITS
+      n8n/                   N8N_CONFIG (from tenant.json automation), N8nWebhookClient (all n8n
+                             webhook calls: timeout + typed N8nError), N8nConnectionsService,
+                             connection-providers.ts, ExternalNavigation
     layout/shell/            header, responsive navbar, language switcher, skip link, footer, <main>
     features/<page>/         <page>.page.ts|html|less|spec.ts  (one folder per route)
       contact/               reactive form + contact.validators.ts
@@ -66,6 +71,8 @@ src/
       connect/               customer onboarding: connect-apps.ts (apps, direct links, paste fields),
                              app card component, ClipboardService. Values stay in signals only:
                              never saved, sent or logged. Texts in `connect.*` translations.
+      integrations/          one-click sign-in page (invite code from `?code=`, result from
+                             `?status=&provider=&reason=` set by n8n). Texts in `integrations.*`.
   environments/environment.ts  version + public Firebase web config
   styles/                    _tokens.less (CSS variables), _base, _a11y, _forms, _connect, _breakpoints
   styles.less                global entry (imports the files above + shell styles)
@@ -73,6 +80,7 @@ src/
 public/
   tenants/tenants.json       domain → tenant id
   tenants/<id>/              tenant.json, logo.svg, favicon.svg, og-image.svg, llms.txt, i18n/<lang>.json
+docs/n8n-connections.md      webhook contract for /integrations (what the n8n workflows must do)
 scripts/                     check-i18n, check-tenants, check-contrast, generate-seo
 deploy/                      Caddyfile (production), Caddyfile.test (local static test on :8080)
 firestore.rules              rules for this site's collections (see §7)
@@ -175,6 +183,22 @@ Global defaults: `src/styles/_tokens.less`. Tenant branding: `src/tenants/<id>/t
 3. The OAuth redirect URI is `automation.n8nBaseUrl` from `tenant.json` followed by
    `/rest/oauth2-credential/callback`.
 
+### Call an n8n webhook from the site
+
+Use `N8nWebhookClient.post(path, body)` from `core/n8n` (never `HttpClient` with a hard-coded URL).
+The base URL comes from `automation.webhookBaseUrl` in `tenant.json`. Catch `N8nError` and switch on
+`error.kind` (`rejected` = 4xx, `server`, `timeout`, `network`, `unavailable`, `invalid-response`).
+Never log request or response bodies. In tests, provide `N8N_CONFIG` + `provideHttpClientTesting()`,
+or mock the feature service.
+
+### Add a provider to the Integrations page
+
+1. Add it to `CONNECTION_PROVIDERS` in `core/n8n/connection-providers.ts` (`authHosts`, `revokeUrl`,
+   `accessCount`).
+2. Add `integrations.providers.<id>` (name, summary, button, `access[i]`, revoke) to en + he.
+3. Support the provider in the n8n `connections/start` and `connections/callback` workflows
+   (`docs/n8n-connections.md`).
+
 ### Add a form that saves to Firestore
 
 Follow the Contact page (`features/contact` + `core/contact`):
@@ -246,6 +270,9 @@ styles), domain in `deploy/Caddyfile` → `npm run check`. See the skill, sectio
 - `.example` site URL and email in `tenant.json`, `llms.txt`, `tenants.json` and `deploy/Caddyfile`
   are placeholders; replace before going public.
 - `npm run check:tenants` needs `deploy/Caddyfile` to list the tenant domains.
+- `/integrations` needs the n8n workflows `connections/start` and `connections/callback`
+  (contract in `docs/n8n-connections.md`); until they exist the buttons show "something went wrong".
+  The chatbot widget can move to `N8nWebhookClient` too.
 
 ## Skills
 

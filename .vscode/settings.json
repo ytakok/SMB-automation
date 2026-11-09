@@ -1,0 +1,6 @@
+{
+    "i18n-ally.localesPaths": [
+        "public/tenants/default/i18n",
+        "src/app/core/i18n"
+    ]
+}
