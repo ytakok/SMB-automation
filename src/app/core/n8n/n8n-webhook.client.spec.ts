@@ -72,6 +72,19 @@ describe('N8nWebhookClient', () => {
     }
   });
 
+  it('lets a call wait longer than the default timeout', async () => {
+    vi.useFakeTimers();
+    try {
+      const { client, http } = setup({ timeoutMs: 50 });
+      const pending = client.post<string>('slow', {}, { timeoutMs: 500 });
+      await vi.advanceTimersByTimeAsync(100);
+      http.expectOne('https://hooks.test/webhook/slow').flush('done');
+      await expect(pending).resolves.toBe('done');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('never calls n8n during prerendering or when not configured', async () => {
     const server = setup({ platform: 'server' });
     await expect(server.client.post('x', {})).rejects.toBeInstanceOf(N8nError);

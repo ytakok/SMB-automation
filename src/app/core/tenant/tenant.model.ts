@@ -31,6 +31,13 @@ export interface TenantConfig {
      * Use the site's own domain when Caddy proxies `/webhook*` to n8n (no CORS).
      */
     webhookBaseUrl?: string;
+    /** Webhook path of the public website chatbot (Home), e.g. `<id>/chat`. Empty = no chat. */
+    chatWebhookPath?: string;
+    /**
+     * Webhook path of the multi-customer assistant. Used instead of `chatWebhookPath` when the page
+     * is opened with `?chatKey=<customer chat key>`; the key picks the customer in n8n.
+     */
+    customerChatWebhookPath?: string;
   };
   social: string[];
   nav: Array<{

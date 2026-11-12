@@ -1,15 +1,16 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { firstValueFrom } from 'rxjs';
+import { N8nError, N8nWebhookClient } from '../../core/n8n/n8n-webhook.client';
+import { TenantService } from '../../core/tenant/tenant.service';
+import { CHAT_CUSTOMER_KEY } from './chat-customer-key';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
   text: string;
 }
 
-const CHAT_ENDPOINT =
-  'https://smb.34-71-188-154.sslip.io/webhook/446e48f9-570a-416a-be34-394c3c540779/chat';
+/** An AI reply can call several tools (calendar, CRM), so allow more than the default timeout. */
+export const CHAT_TIMEOUT_MS = 90_000;
 
 function replyText(response: unknown): string {
   if (typeof response === 'string' && response.trim()) {
@@ -57,17 +58,23 @@ function replyText(response: unknown): string {
             </button>
           </header>
           <div class="chat-messages" role="log" aria-live="polite" aria-relevant="additions">
-            <p class="chat-message chat-message--assistant">{{ 'home.chatbot.greeting' | translate }}</p>
+            <p class="chat-message chat-message--assistant">
+              {{ 'home.chatbot.greeting' | translate }}
+            </p>
             @for (message of messages(); track $index) {
               <p
                 class="chat-message"
                 [class.chat-message--user]="message.role === 'user'"
                 [class.chat-message--assistant]="message.role === 'assistant'"
                 dir="auto"
-              >{{ message.text }}</p>
+              >
+                {{ message.text }}
+              </p>
             }
             @if (sending()) {
-              <p class="chat-message chat-message--assistant">{{ 'home.chatbot.sending' | translate }}</p>
+              <p class="chat-message chat-message--assistant">
+                {{ 'home.chatbot.sending' | translate }}
+              </p>
             }
           </div>
           @if (hasError()) {
@@ -98,9 +105,7 @@ function replyText(response: unknown): string {
         class="chat-toggle"
         type="button"
         [attr.aria-expanded]="isOpen()"
-        [attr.aria-label]="
-          (isOpen() ? 'home.chatbot.close' : 'home.chatbot.open') | translate
-        "
+        [attr.aria-label]="(isOpen() ? 'home.chatbot.close' : 'home.chatbot.open') | translate"
         (click)="isOpen.update((open) => !open)"
       >
         <span aria-hidden="true">{{ isOpen() ? '×' : '✦' }}</span>
@@ -111,7 +116,9 @@ function replyText(response: unknown): string {
   styleUrl: './chatbot-widget.component.less',
 })
 export class ChatbotWidgetComponent {
-  private readonly http = inject(HttpClient);
+  private readonly n8n = inject(N8nWebhookClient);
+  private readonly automation = inject(TenantService).config().automation;
+  private readonly customerKey = inject(CHAT_CUSTOMER_KEY);
 
   protected readonly isOpen = signal(false);
   protected readonly sending = signal(false);
@@ -134,22 +141,45 @@ export class ChatbotWidgetComponent {
 
     try {
       this.sessionId ||= globalThis.crypto.randomUUID();
-      const response = await firstValueFrom(
-        this.http.post<unknown>(CHAT_ENDPOINT, {
-          action: 'sendMessage',
-          sessionId: this.sessionId,
-          chatInput,
-        }),
-      );
+      const response = await this.n8n.post<unknown>(this.chatPath(), this.chatBody(chatInput), {
+        timeoutMs: CHAT_TIMEOUT_MS,
+      });
       this.messages.update((messages) => [
         ...messages,
         { role: 'assistant', text: replyText(response) },
       ]);
     } catch (error) {
-      console.error('Chat request failed.', error);
+      // Never log message text or replies.
+      console.error(
+        'Chat request failed:',
+        error instanceof N8nError ? error.kind : 'invalid-response',
+      );
       this.hasError.set(true);
     } finally {
       this.sending.set(false);
     }
+  }
+
+  /** With a customer key: the multi-customer assistant. Otherwise: the public website chatbot. */
+  private chatPath(): string {
+    const path = this.customerKey
+      ? this.automation?.customerChatWebhookPath
+      : this.automation?.chatWebhookPath;
+    if (!path) {
+      throw new N8nError('unavailable');
+    }
+    return path;
+  }
+
+  private chatBody(chatInput: string): Record<string, unknown> {
+    const body: Record<string, unknown> = {
+      action: 'sendMessage',
+      sessionId: this.sessionId,
+      chatInput,
+    };
+    if (this.customerKey) {
+      body['metadata'] = { customerKey: this.customerKey };
+    }
+    return body;
   }
 }

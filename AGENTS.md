@@ -67,7 +67,8 @@ src/
     layout/shell/            header, responsive navbar, language switcher, skip link, footer, <main>
     features/<page>/         <page>.page.ts|html|less|spec.ts  (one folder per route)
       contact/               reactive form + contact.validators.ts
-      chatbot/               n8n chat widget (used on Home)
+      chatbot/               n8n chat widget (used on Home). `?chatKey=<key>` switches it to the
+                             multi-customer assistant (`CHAT_CUSTOMER_KEY`, kept per tab)
       connect/               customer onboarding: connect-apps.ts (apps, direct links, paste fields),
                              app card component, ClipboardService. Values stay in signals only:
                              never saved, sent or logged. Texts in `connect.*` translations.
@@ -81,6 +82,9 @@ public/
   tenants/tenants.json       domain → tenant id
   tenants/<id>/              tenant.json, logo.svg, favicon.svg, og-image.svg, llms.txt, i18n/<lang>.json
 docs/n8n-connections.md      webhook contract for /integrations (what the n8n workflows must do)
+public/embed/                chat-widget.js + chat.html: the chat customers embed on THEIR websites (plain JS,
+                             no Angular; served at /embed/). public/embed/test/*.html: local test pages, served
+                             by the dev server only; production builds ignore embed/test (see angular.json)
 scripts/                     check-i18n, check-tenants, check-contrast, generate-seo
 deploy/                      Caddyfile (production), Caddyfile.test (local static test on :8080)
 firestore.rules              rules for this site's collections (see §7)
@@ -188,8 +192,21 @@ Global defaults: `src/styles/_tokens.less`. Tenant branding: `src/tenants/<id>/t
 Use `N8nWebhookClient.post(path, body)` from `core/n8n` (never `HttpClient` with a hard-coded URL).
 The base URL comes from `automation.webhookBaseUrl` in `tenant.json`. Catch `N8nError` and switch on
 `error.kind` (`rejected` = 4xx, `server`, `timeout`, `network`, `unavailable`, `invalid-response`).
+Pass `{ timeoutMs }` as the third argument for slow webhooks (the chat uses 90 s for AI replies).
 Never log request or response bodies. In tests, provide `N8N_CONFIG` + `provideHttpClientTesting()`,
 or mock the feature service.
+
+### Website chat for customers' sites (`public/embed/`)
+
+- Customers paste `<script src="https://<site>/embed/chat-widget.js" data-site-key="site_…" data-lang="he" defer></script>`.
+  Direct link: `/embed/chat.html?key=site_…&lang=he`. The widget posts `{ siteKey, sessionId, chatInput }`
+  to `<script origin>/webhook/site-chat` (n8n workflow **MT – Website chatbot (public)**).
+- The site key is public. n8n checks the website's Origin against the customer's `allowed_origins`, rate-limits,
+  and gives the AI visitor-safe tools only. Never embed the owner assistant (`?chatKey=` keys) on a website.
+- Site keys, allowed domains, about text and meeting hours are set with the n8n workflow
+  **MT – Admin: website chat settings**. Add `http://localhost:4200` to a customer's domains to test locally.
+- Keep the widget dependency-free and self-contained (shadow DOM, inline CSS, he/en texts inside the file);
+  it runs on sites we don't control.
 
 ### Add a provider to the Integrations page
 
@@ -262,8 +279,6 @@ styles), domain in `deploy/Caddyfile` → `npm run check`. See the skill, sectio
 
 ## 9. Known issues / TODO
 
-- `chatbot-widget.component.spec.ts` expects `https://n8n.34-71-188-154.sslip.io/...` but the
-  component calls `https://smb.34-71-188-154.sslip.io/...`. Decide the correct URL and align both.
 - `.github/workflows/deploy.yml` runs `npx ng build` and copies `dist/SMB-automation/browser`;
   `npm run build` outputs `dist/default/browser` and also generates sitemap/robots/llms.txt.
   Align the workflow with `npm run build` and the `dist/default/browser` path.
@@ -272,7 +287,6 @@ styles), domain in `deploy/Caddyfile` → `npm run check`. See the skill, sectio
 - `npm run check:tenants` needs `deploy/Caddyfile` to list the tenant domains.
 - `/integrations` needs the n8n workflows `connections/start` and `connections/callback`
   (contract in `docs/n8n-connections.md`); until they exist the buttons show "something went wrong".
-  The chatbot widget can move to `N8nWebhookClient` too.
 
 ## Skills
 

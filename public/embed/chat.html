@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Chat</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #f6f7fb;
+      }
+      .missing {
+        font:
+          16px/1.5 system-ui,
+          sans-serif;
+        padding: 24px;
+        color: #8a1c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      // Direct chat link for one customer: /embed/chat.html?key=site_...&lang=he|en
+      (function () {
+        var params = new URLSearchParams(location.search);
+        var key = params.get('key') || '';
+        var lang = params.get('lang') === 'en' ? 'en' : 'he';
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
+        if (!/^site_[a-f0-9]{24,64}$/.test(key)) {
+          var p = document.createElement('p');
+          p.className = 'missing';
+          p.textContent = lang === 'he' ? 'קישור הצ׳אט לא תקין.' : 'This chat link is not valid.';
+          document.body.appendChild(p);
+          return;
+        }
+        var s = document.createElement('script');
+        s.src = 'chat-widget.js';
+        s.setAttribute('data-site-key', key);
+        s.setAttribute('data-lang', lang);
+        s.setAttribute('data-mode', 'inline');
+        if (params.get('title')) s.setAttribute('data-title', params.get('title').slice(0, 60));
+        document.body.appendChild(s);
+      })();
+    </script>
+  </body>
+</html>

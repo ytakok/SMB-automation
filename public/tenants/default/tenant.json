@@ -20,7 +20,9 @@
   },
   "automation": {
     "n8nBaseUrl": "https://n8n.34-71-188-154.sslip.io",
-    "webhookBaseUrl": "https://smb.34-71-188-154.sslip.io"
+    "webhookBaseUrl": "https://smb.34-71-188-154.sslip.io",
+    "chatWebhookPath": "446e48f9-570a-416a-be34-394c3c540779/chat",
+    "customerChatWebhookPath": "ada4c0f1-40ac-44bf-93be-0a1fda3403ad/chat"
   },
   "social": [],
   "nav": [

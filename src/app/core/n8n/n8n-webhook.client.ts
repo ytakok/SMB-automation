@@ -45,13 +45,20 @@ export class N8nWebhookClient {
     return `${this.config.webhookBaseUrl}/webhook/${path.replace(/^\/+/, '')}`;
   }
 
-  async post<T>(path: string, body: Record<string, unknown>): Promise<T> {
+  /** `options.timeoutMs` overrides the default for slow webhooks (for example an AI chat reply). */
+  async post<T>(
+    path: string,
+    body: Record<string, unknown>,
+    options: { timeoutMs?: number } = {},
+  ): Promise<T> {
     if (!this.browser || !this.isConfigured()) {
       throw new N8nError('unavailable');
     }
     try {
       return await firstValueFrom(
-        this.http.post<T>(this.url(path), body).pipe(timeout(this.config.timeoutMs)),
+        this.http
+          .post<T>(this.url(path), body)
+          .pipe(timeout(options.timeoutMs ?? this.config.timeoutMs)),
       );
     } catch (error) {
       throw toN8nError(error);
